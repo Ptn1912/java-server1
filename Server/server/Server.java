@@ -1,41 +1,19 @@
 package server;
 
-import java.awt.EventQueue;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-public class Server extends JFrame {
-
-	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Server frame = new Server();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+public class Server {
+	public static void main(String[] args) throws IOException {
+		ServerSocket serverSocket = new ServerSocket(8080);
+		
+		while(true){
+			Socket clientSocket = serverSocket.accept();
+			System.out.println("Mot client moi da ket noi: " + clientSocket);
+			ThreadServer threadServer = new ThreadServer(clientSocket);
+			threadServer.start();
+			
+		}
 	}
-
-	/**
-	 * Create the frame.
-	 */
-	public Server() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane);
-	}
-
 }
