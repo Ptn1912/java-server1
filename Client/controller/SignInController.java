@@ -3,6 +3,7 @@ package controller;
 import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,7 +26,7 @@ public class SignInController {
     private JButton btnSignUp, btnSignIn;
     private JTextField textField;
     private JPasswordField passwordField;
-    private String result;
+    private boolean result;
     
     public SignInController(JButton btnSignUp, JButton btnSignIn, JFrame signIn,JTextField textField,JPasswordField passwordField) {
         this.btnSignUp = btnSignUp;
@@ -35,8 +36,8 @@ public class SignInController {
         this.passwordField=passwordField;
     }
     
-    public SignInController(String result) {
-    	this.result = result;
+    public SignInController() {
+    	
     }
 
 	public void setEvent() {
@@ -72,26 +73,27 @@ public class SignInController {
                 btnSignIn.setBackground(new Color(82, 189, 36));
                 btnSignIn.setForeground(new Color(255, 255, 255));
             }
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-            	try {
-            		Client socket = new Client(getUserName(), getPassword());
-					socket.startClient();
-					
-					
-					if(result.equals("rong")) {
-						JOptionPane.showMessageDialog(null, "Tên đăng nhập hoặc mật khẩu bị bỏ trống!");
-					}else if(result.equals("ok")) {
-						JOptionPane.showMessageDialog(null, "Bạn đã đăng nhập thành công");
-						signIn.dispose();
-                     	MainPage mp=new MainPage();
-                     	mp.setVisible(true);
-					}else {
-						JOptionPane.showMessageDialog(null, "User hoac password sai!");
-					}
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    String userName = getUserName();
+                    String password = getPassword();
+
+                    Client client = new Client(userName, password, SignInController.this);
+                    client.startClient();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+//					if(result.equals("rong")) {
+//						JOptionPane.showMessageDialog(null, "Tên đăng nhập hoặc mật khẩu bị bỏ trống!");
+//					}else if(result.equals("ok")) {
+//						JOptionPane.showMessageDialog(null, "Bạn đã đăng nhập thành công");
+//						signIn.dispose();
+//                     	MainPage mp=new MainPage();
+//                     	mp.setVisible(true);
+//					}else {
+//						JOptionPane.showMessageDialog(null, "User hoac password sai!");
+//					}
+				
 //            	 try {
 //                     Connection connection = DBConnect.getJDBCConnection();
 //                     PreparedStatement st = connection
@@ -119,16 +121,30 @@ public class SignInController {
         });
     }
 	
-	public String getUserName() {
-		String userName = textField.getText();
-		return userName;
-	}
-	
-	public String getPassword() {
-		String password = passwordField.getText();
-		return password;
-	}
+	 public String getUserName() {
+	        return textField.getText();
+	    }
+
+	    public String getPassword() {
+	        return new String(passwordField.getPassword());
+	    }
+
+	    public void setResult(boolean result) {
+	        this.result = result;
+	    }
+
+	    public void showResultDialog() {
+	        if (result) {
+	            JOptionPane.showMessageDialog(null, "OK");
+	            signIn.dispose();
+	            MainPage mp = new MainPage();
+	            mp.setVisible(true);
+	        } else {
+	            JOptionPane.showMessageDialog(null, "KO");
+	        }
+	    }
 }
+
 
 		
 

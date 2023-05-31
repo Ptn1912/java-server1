@@ -7,34 +7,33 @@ import javax.swing.JOptionPane;
 import view.MainPage;
 
 public class AccountDAO {
-	private String userName, password;
-	
-	public AccountDAO(String userName, String password) {
-		this.userName = userName;
-		this.password = password;
-	}
+    private String userName;
+    private String password;
 
-	public String checkLogin() {
-		try {
+    public AccountDAO(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
+    }
+
+    public boolean checkLogin() {
+        try {
             Connection connection = DBConnect.getJDBCConnection();
-            PreparedStatement st = connection
-                    .prepareStatement("Select T_TDN,T_MK from TA_LPN_ACCOUNT where T_TDN=? and T_MK=?");
+            PreparedStatement st = connection.prepareStatement("SELECT T_TDN, T_MK FROM TA_LPN_ACCOUNT WHERE T_TDN=? AND T_MK=?");
             st.setString(1, userName);
             st.setString(2, password);
             ResultSet rs = st.executeQuery();
+
+            // Kiểm tra xem ResultSet có kết quả hay không
             if (rs.next()) {
-           	 if(userName.equals("")||password.equals("")) {
-           		 return "rong";
-           	 }
-           	 else{
-           		return "ok";
-           	 }
+                // Kết quả đăng nhập đúng
+                return true;
             } else {
-                return "false";
+                // Kết quả đăng nhập sai
+                return false;
             }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
-		return null;
-	}
+        return false;
+    }
 }
