@@ -2,6 +2,7 @@ package controller;
 
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -19,6 +20,7 @@ import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 
 import com.mysql.cj.xdevapi.PreparableStatement;
 
+import client.Client;
 import dao.DBConnect;
 
 import view.*;
@@ -26,18 +28,25 @@ import view.*;
 public class SignUpController {
 	private JFrame signUp;
 	private JButton btnAccountSurvivaled, btnConfirm;
-	private JTextField textField, textField_1, textField_2;
-	private JPasswordField passwordField,passwordField_1;
-	public SignUpController(JButton btnAccountSurvivaled, JButton btnConfirm, JFrame signUp,JTextField textField, JTextField textField_1, JTextField textField_2, JPasswordField passwordField,JPasswordField passwordField_1) {
+	private JTextField textField_1, textField_2, textField_3;
+	private JPasswordField passwordField_1,passwordField_2;
+	private String email,tdn,tnd,mk;
+	private String result1;
+	public SignUpController(JButton btnAccountSurvivaled, JButton btnConfirm, JFrame signUp,JTextField textField_1, JTextField textField_2, JTextField textField_3, JPasswordField passwordField_1,JPasswordField passwordField_2) {
         this.btnAccountSurvivaled = btnAccountSurvivaled;
         this.btnConfirm = btnConfirm;
         this.signUp = signUp;
-        this.textField = textField;
         this.textField_1 = textField_1;
         this.textField_2 = textField_2;
-        this.passwordField = passwordField;
-        this.passwordField_1=passwordField_1;
+        this.textField_3 = textField_3;
+        this.passwordField_1 = passwordField_1;
+        this.passwordField_2=passwordField_2;
     }
+	 public SignUpController(String receiver) {
+	        
+         this.result1 = receiver;
+     
+ }
 	public void setEvent() {
 		btnAccountSurvivaled.addMouseListener(new MouseAdapter() {			
 			@Override
@@ -78,37 +87,76 @@ public class SignUpController {
 			
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent e) {
-			    if (textField.getText().isEmpty() || textField_1.getText().isEmpty() || textField_2.getText().isEmpty() || passwordField.getPassword().length == 0 || passwordField_1.getPassword().length == 0) {
-			        JOptionPane.showMessageDialog(signUp, "Thông tin không được trống!");
-               }
-			    else if(!Arrays.equals(passwordField.getPassword(),passwordField_1.getPassword())) {
-				      JOptionPane.showMessageDialog(null, "Mât khẩu vừa nhập không khớp!");
-				    }else if(!textField.getText().endsWith("@gmail.com")) {
-				    	JOptionPane.showMessageDialog(null, "Email vừa nhập không đúng định dạng!");
-				    }
-			    else {
-                    try {
-			    Connection conn = DBConnect.getJDBCConnection();
-			    String st ="INSERT INTO `connect`.`TA_LPN_ACCOUNT` (`T_EMAIL`, `T_TDN`, `T_TND`, `T_MK`) VALUES (?, ?, ?, ?);";
-			    PreparedStatement ps = conn.prepareStatement(st);
-			    ps.setString(1, textField.getText());
-			    ps.setString(2, textField_1.getText());
-			    ps.setString(3, textField_2.getText());
-			    ps.setString(4, new String(passwordField.getPassword()));
-			    int check = ps.executeUpdate();
-			     if(check != 0){
+				try {
+					email = getemail(); // Lấy giá trị userName từ textField
+                   tdn=gettdn();
+                   tnd=gettnd();
+                   mk=getmk();
+				
+                   if (email == null || email.isEmpty() || tdn == null || tdn.isEmpty() || tnd == null || tnd.isEmpty() || mk == null || mk.isEmpty() || passwordField_2.getPassword().length == 0) {
+                	    JOptionPane.showMessageDialog(null, "Thông tin không được trống!");
+                	} else if (!Arrays.equals(passwordField_1.getPassword(), passwordField_2.getPassword())) {
+                	    JOptionPane.showMessageDialog(null, "Mật khẩu vừa nhập không khớp!");
+                	} else if (!textField_1.getText().endsWith("@gmail.com")) {
+                	    JOptionPane.showMessageDialog(null, "Email vừa nhập không đúng định dạng!");
+                	} else {
+			    	 Client client = new Client(email, tdn, tnd, mk, textField_1,textField_2,textField_3, passwordField_1);
+                     client.startClientt();
+
+                     String currentResultt = client.getResult1();
+                     System.out.print("moi:"+currentResultt);
+                     if ("exists".equals(currentResultt)) {
+                    	   JOptionPane.showMessageDialog(null, "Tài khoản đã tồn tại!");
+                     }else {
 			        JOptionPane.showMessageDialog(signUp, "Đăng kí thành công!");
 			        signUp.dispose();
                	SignIn dn=new SignIn();
                	dn.setVisible(true);
 			    }
-			    conn.close();
-			} catch (SQLException e1) {
+			    }
+			} catch (IOException e1) {
 			    e1.printStackTrace();
 			}
 		}
-		}
+		
 	});
 	}
-	
+	public String getemail() {
+	    String email = textField_1.getText();
+	    if (email == null) {
+	        return "";
+	    }
+	    return email;
+	}
+
+	public String gettdn() {
+	    String tdn = textField_2.getText();
+	    if (tdn == null) {
+	        return "";
+	    }
+	    return tdn;
+	}
+	public String gettnd() {
+	    String tnd = textField_3.getText();
+	    if (tnd == null) {
+	        return "";
+	    }
+	    return tnd;
+	}
+
+    public String getmk() {
+        String mk = new String(passwordField_1.getPassword());
+        if (mk == null) {
+	        return "";
+	    }
+	    return mk;
+    }
+	    public void setResult1(String result1) {
+	        this.result1 = result1;
+	    }
+		
+	    public String getResult1() {
+	       
+	        return result1;
+	    }
 }

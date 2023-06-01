@@ -35,7 +35,7 @@ public class SignIn extends JFrame {
 
 	public SignIn() {
 		init();
-		SignInController control = new SignInController(btnSignUp, btnSignIn, this, textField, passwordField);
+		SignInControler control = new SignInControler(btnSignUp, btnSignIn, this, textField, passwordField);
 		control.setEvent();
 		
 	}

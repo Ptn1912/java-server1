@@ -8,32 +8,48 @@ import java.net.Socket;
 import dao.AccountDAO;
 
 public class ThreadServer extends Thread {
-    private Socket socketClient;
+    private Socket socket;
+    private String userName, password;
+    private String email, tdn, tnd, mk;
 
     public ThreadServer(Socket socketClient) {
-        this.socketClient = socketClient;
+        this.socket = socketClient;
     }
 
     @Override
     public void run() {
         try {
-            DataInputStream dip = new DataInputStream(socketClient.getInputStream());
-            DataOutputStream dop = new DataOutputStream(socketClient.getOutputStream());
+            DataInputStream dip = new DataInputStream(socket.getInputStream());
+            DataOutputStream dop = new DataOutputStream(socket.getOutputStream());
 
-            String userNameRec = dip.readUTF();
-            String passwordRec = dip.readUTF();
+            String userName = dip.readUTF();
+            String password = dip.readUTF();
+            String email = dip.readUTF();
+            String tdn = dip.readUTF();
+            String tnd = dip.readUTF();
+            String mk = dip.readUTF();
+            this.userName = userName;
+            this.password = password;
+            this.email = email;
+            this.tdn = tdn;
+            this.tnd = tnd;
+            this.mk = mk;
 
-            AccountDAO account = new AccountDAO(userNameRec, passwordRec);
-            boolean check = account.checkLogin();
+            String check;
+            AccountDAO account = new AccountDAO(userName, password);
+            check = account.checkLogin();
+            dop.writeUTF(check);
 
-            String result = check ? "OK" : "KO";
+            String kt;
+            AccountDAO ac = new AccountDAO(email, tdn, tnd, mk);
+            kt = ac.checkSignup();
+            dop.writeUTF(kt);
 
-            dop.writeUTF(result);
-
-            socketClient.close();
+           
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
-

@@ -21,13 +21,13 @@ public class SignUp extends JFrame {
 
 	private JPanel contentPane;
 	private JLabel jlb_pass, jlb_email, jlb_passAgain, jlb_nameLogin, jlb_title, lblNewLabel, jlb_nameUser;
-	private JTextField textField, textField_2, textField_1;
-	private JPasswordField passwordField,passwordField_1;
+	private JTextField textField_1, textField_2, textField_3;
+	private JPasswordField passwordField_1,passwordField_2;
 	private JButton btnAccountSurvivaled, btnConfirm;
 
 	public SignUp() {
 		init();
-        SignUpController control = new SignUpController(btnAccountSurvivaled, btnConfirm, this, textField,textField_2,textField_1,passwordField,passwordField_1);
+        SignUpController control = new SignUpController(btnAccountSurvivaled, btnConfirm, this, textField_1,textField_3,textField_2,passwordField_1,passwordField_2);
         control.setEvent();
 	}
 	
@@ -60,27 +60,27 @@ public class SignUp extends JFrame {
 		btnAccountSurvivaled.setBounds(140, 421, 247, 50);
 		contentPane.add(btnAccountSurvivaled);
 		
+		passwordField_2 = new JPasswordField();
+		passwordField_2.setFont(new Font("Cambria Math", Font.PLAIN, 20));
+		passwordField_2.setBounds(442, 359, 370, 49);
+		contentPane.add(passwordField_2);
+		
 		passwordField_1 = new JPasswordField();
 		passwordField_1.setFont(new Font("Cambria Math", Font.PLAIN, 20));
-		passwordField_1.setBounds(442, 359, 370, 49);
+		passwordField_1.setBounds(442, 291, 370, 51);
 		contentPane.add(passwordField_1);
 		
-		passwordField = new JPasswordField();
-		passwordField.setFont(new Font("Cambria Math", Font.PLAIN, 20));
-		passwordField.setBounds(442, 291, 370, 51);
-		contentPane.add(passwordField);
+		textField_2 = new JTextField();
+		textField_2.setFont(new Font("Cambria Math", Font.PLAIN, 20));
+		textField_2.setColumns(10);
+		textField_2.setBounds(442, 178, 370, 49);
+		contentPane.add(textField_2);
 		
 		textField_1 = new JTextField();
 		textField_1.setFont(new Font("Cambria Math", Font.PLAIN, 20));
-		textField_1.setColumns(10);
-		textField_1.setBounds(442, 178, 370, 49);
+		textField_1.setBounds(442, 117, 373, 50);
 		contentPane.add(textField_1);
-		
-		textField = new JTextField();
-		textField.setFont(new Font("Cambria Math", Font.PLAIN, 20));
-		textField.setBounds(442, 117, 373, 50);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		textField_1.setColumns(10);
 		
 		jlb_pass = new JLabel("Mật khẩu :");
 		jlb_pass.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -110,11 +110,11 @@ public class SignUp extends JFrame {
 		jlb_nameLogin.setBounds(111, 163, 321, 50);
 		contentPane.add(jlb_nameLogin);
 		
-		textField_2 = new JTextField();
-		textField_2.setFont(new Font("Cambria Math", Font.PLAIN, 20));
-		textField_2.setColumns(10);
-		textField_2.setBounds(442, 235, 370, 48);
-		contentPane.add(textField_2);
+		textField_3 = new JTextField();
+		textField_3.setFont(new Font("Cambria Math", Font.PLAIN, 20));
+		textField_3.setColumns(10);
+		textField_3.setBounds(442, 235, 370, 48);
+		contentPane.add(textField_3);
 		
 		jlb_title = new JLabel("Đăng Ký");
 		jlb_title.setVerticalAlignment(SwingConstants.BOTTOM);
