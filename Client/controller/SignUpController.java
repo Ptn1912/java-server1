@@ -107,7 +107,7 @@ public class SignUpController {
                      System.out.print("moi:"+currentResult);
                      if ("exists".equals(currentResult)) {
                     	   JOptionPane.showMessageDialog(null, "Tài khoản đã tồn tại!");
-                     }else {
+                     }else if("success".equals(currentResult)) {
 			        JOptionPane.showMessageDialog(signUp, "Đăng kí thành công!");
 			        signUp.dispose();
                	SignIn dn=new SignIn();

@@ -52,7 +52,7 @@ public class AccountDAO {
     public String checkSignup() {
     	try {
              Connection connection = DBConnect.getJDBCConnection();
-             PreparedStatement st = connection.prepareStatement("SELECT T_TDN, T_EMAIL FROM TA_LPN_ACCOUNT WHERE T_TDN = ? OR T_EMAIL = ?");
+             PreparedStatement st = connection.prepareStatement("SELECT T_EMAIL,T_TDN FROM TA_LPN_ACCOUNT WHERE T_EMAIL= ? OR T_TDN = ?");
              st.setString(1, email);
              st.setString(2, tdn);
              ResultSet rs = st.executeQuery();
@@ -61,7 +61,7 @@ public class AccountDAO {
                  return "exists"; // Trả về "exists" khi tên đăng nhập hoặc email đã tồn tại
              } else {
                  // Tiến hành đăng ký tài khoản
-                 PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO TA_LPN_ACCOUNT(T_EMAIL, T_TDN, T_TND, T_MK) VALUES (?, ?, ?, ?)");
+                 PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO TA_LPN_ACCOUNT(T_EMAIL,T_TDN,T_TND,T_MK) VALUES (?, ?, ?, ?)");
                  insertStatement.setString(1, email);
                  insertStatement.setString(2, tdn);
                  insertStatement.setString(3, tnd);
