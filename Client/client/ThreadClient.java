@@ -18,65 +18,48 @@ import view.SignIn;
 public class ThreadClient extends Thread {
     private Socket socket;
     private String userName, password;
-    private String result,result1;
-    private JButton btnSignUp, btnSignIn;
-    private JFrame signIn;
-    private JTextField textField;
-    private JPasswordField passwordField;
-    private String email,tdn,tnd,mk;
-    private JTextField textField_1, textField_2, textField_3;
-	private JPasswordField passwordField_1,passwordField_2;
-	private JFrame signUp;
-	private JButton btnAccountSurvivaled, btnConfirm;
-    public ThreadClient(Socket socket, String userName, String password, JButton btnSignUp, JButton btnSignIn, JFrame signIn, JTextField textField, JPasswordField passwordField) {
+    private String email, tdn, tnd, mk, mkagain;
+    private String signal;
+    private String result;
+    public ThreadClient(Socket socket, String userName, String password, String signal) {
         this.socket = socket;
         this.userName = userName;
         this.password = password;
-        this.btnSignUp = btnSignUp;
-        this.btnSignIn = btnSignIn;
-        this.signIn = signIn;
-        this.textField = textField;
-        this.passwordField = passwordField;
+        this.signal = signal;
     }
 
-    public ThreadClient(Socket socket, String email, String tdn, String tnd, String mk, JTextField textField_1,
-			JTextField textField_2, JTextField textField_3, JPasswordField passwordField_1) {
-    	this.socket=socket;
-    	this.email=email;
-    	this.tdn=tdn;
-    	this.tnd=tnd;
-    	this.mk=mk;
-    	this.textField_1=textField_1;
-    	this.textField_2=textField_2;
-    	this.textField_3=textField_3;
-    	this.passwordField_1=passwordField_1;
-	}
-
+    public ThreadClient(Socket socket, String email, String tdn, String tnd, String mk, String mkagain, String signal) {
+        this.socket = socket;
+        this.email = email;
+        this.tdn = tdn;
+        this.tnd = tnd;
+        this.mk = mk;
+        this.mkagain = mkagain;
+        this.signal = signal;
+    }
+    
 	@Override
     public void run() {
         try {
             DataInputStream dip = new DataInputStream(socket.getInputStream());
             DataOutputStream dop = new DataOutputStream(socket.getOutputStream());
-
-            dop.writeUTF(userName);
-            dop.writeUTF(password);
-          
-
-            dop.writeUTF(email);
-            dop.writeUTF(tdn);
-            dop.writeUTF(tnd);
-            dop.writeUTF(mk);
             
-            result = dip.readUTF();
-            result1 = dip.readUTF(); 
-          
-
+            dop.writeUTF(signal);
+            if(signal .equals("login")) {
+            	dop.writeUTF(userName);
+                dop.writeUTF(password);
+            }else if(signal.equals("register")) {
+            	dop.writeUTF(email);
+            	dop.writeUTF(tdn);
+            	dop.writeUTF(tnd);
+            	dop.writeUTF(mk);
+            	dop.writeUTF(mkagain);
+            }
+            
+            result = dip.readUTF(); 
            
-            SignInControler control = new SignInControler(btnSignUp, btnSignIn, signIn, textField, passwordField);
+            SignInControler control = new SignInControler(result);
             control.setResult(result);
-            
-            SignUpController ct=new SignUpController(btnAccountSurvivaled,btnConfirm,signUp,textField_1,textField_2,textField_3,passwordField_1, passwordField_2);
-            ct.setResult1(result1);
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -85,9 +68,6 @@ public class ThreadClient extends Thread {
 
     public String getResult() {
         return result;
-    }
-    public String getResult1() {
-        return result1;
     }
 }
 

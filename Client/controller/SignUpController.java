@@ -30,7 +30,7 @@ public class SignUpController {
 	private JButton btnAccountSurvivaled, btnConfirm;
 	private JTextField textField_1, textField_2, textField_3;
 	private JPasswordField passwordField_1,passwordField_2;
-	private String email,tdn,tnd,mk;
+	private String email,tdn,tnd,mk, mkagain;
 	private String result1;
 	public SignUpController(JButton btnAccountSurvivaled, JButton btnConfirm, JFrame signUp,JTextField textField_1, JTextField textField_2, JTextField textField_3, JPasswordField passwordField_1,JPasswordField passwordField_2) {
         this.btnAccountSurvivaled = btnAccountSurvivaled;
@@ -43,10 +43,9 @@ public class SignUpController {
         this.passwordField_2=passwordField_2;
     }
 	 public SignUpController(String receiver) {
-	        
          this.result1 = receiver;
-     
- }
+	}
+	
 	public void setEvent() {
 		btnAccountSurvivaled.addMouseListener(new MouseAdapter() {			
 			@Override
@@ -88,24 +87,25 @@ public class SignUpController {
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent e) {
 				try {
-					email = getemail(); // Lấy giá trị userName từ textField
-                   tdn=gettdn();
-                   tnd=gettnd();
-                   mk=getmk();
+					email = getEmail(); // Lấy giá trị userName từ textField
+					tdn=getUserName();
+					tnd=getName();
+					mk=getPassword_0();
+					mkagain = getPasswordAgain();
 				
-                   if (email == null || email.isEmpty() || tdn == null || tdn.isEmpty() || tnd == null || tnd.isEmpty() || mk == null || mk.isEmpty() || passwordField_2.getPassword().length == 0) {
-                	    JOptionPane.showMessageDialog(null, "Thông tin không được trống!");
+					if (email == null || email.isEmpty() || tdn == null || tdn.isEmpty() || tnd == null || tnd.isEmpty() || mk == null || mk.isEmpty() || mkagain == null || mkagain.isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Thông tin không được trống!");
                 	} else if (!Arrays.equals(passwordField_1.getPassword(), passwordField_2.getPassword())) {
                 	    JOptionPane.showMessageDialog(null, "Mật khẩu vừa nhập không khớp!");
                 	} else if (!textField_1.getText().endsWith("@gmail.com")) {
                 	    JOptionPane.showMessageDialog(null, "Email vừa nhập không đúng định dạng!");
                 	} else {
-			    	 Client client = new Client(email, tdn, tnd, mk, textField_1,textField_2,textField_3, passwordField_1);
-                     client.startClientt();
+			    	 Client client = new Client(email, tdn, tnd, mk, mkagain, "register");
+                     client.startClient();
 
-                     String currentResultt = client.getResult1();
-                     System.out.print("moi:"+currentResultt);
-                     if ("exists".equals(currentResultt)) {
+                     String currentResult = client.getResult();
+                     System.out.print("moi:"+currentResult);
+                     if ("exists".equals(currentResult)) {
                     	   JOptionPane.showMessageDialog(null, "Tài khoản đã tồn tại!");
                      }else {
 			        JOptionPane.showMessageDialog(signUp, "Đăng kí thành công!");
@@ -121,7 +121,7 @@ public class SignUpController {
 		
 	});
 	}
-	public String getemail() {
+	public String getEmail() {
 	    String email = textField_1.getText();
 	    if (email == null) {
 	        return "";
@@ -129,14 +129,14 @@ public class SignUpController {
 	    return email;
 	}
 
-	public String gettdn() {
+	public String getUserName() {
 	    String tdn = textField_2.getText();
 	    if (tdn == null) {
 	        return "";
 	    }
 	    return tdn;
 	}
-	public String gettnd() {
+	public String getName() {
 	    String tnd = textField_3.getText();
 	    if (tnd == null) {
 	        return "";
@@ -144,12 +144,19 @@ public class SignUpController {
 	    return tnd;
 	}
 
-    public String getmk() {
+    public String getPassword_0() {
         String mk = new String(passwordField_1.getPassword());
         if (mk == null) {
 	        return "";
 	    }
 	    return mk;
+    }
+    public String getPasswordAgain() {
+        String mk_again = new String(passwordField_2.getPassword());
+        if (mk_again == null) {
+	        return "";
+	    }
+	    return mk_again;
     }
 	    public void setResult1(String result1) {
 	        this.result1 = result1;

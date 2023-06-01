@@ -9,16 +9,17 @@ import view.MainPage;
 public class AccountDAO {
 	private String userName, password;
 	private String result,result1;
-	private String email,tdn,tnd,mk;
+	private String email,tdn,tnd,mk,mkagain;
 	public AccountDAO(String userName, String password) {
 		this.userName = userName;
 		this.password = password;
 	}
-	public AccountDAO(String email,String tdn,String tnd,String mk) {
+	public AccountDAO(String email,String tdn,String tnd,String mk, String mkagain) {
 		this.email=email;
 		this.tdn=tdn;
 		this.tnd=tnd;
 		this.mk=mk;
+		this.mkagain = mkagain;
 	}
 
 	public String checkLogin() {
@@ -47,15 +48,9 @@ public class AccountDAO {
 	        throw new RuntimeException("Lỗi khi thực hiện truy vấn SQL", sqlException);
 	    }
 	}
-	public void setResult(String result) {
-        this.result = result;
-    }
-	
-    public String getResult() {
-        return result;
-    }
-        public String checkSignup() {
-    	 try {
+    
+    public String checkSignup() {
+    	try {
              Connection connection = DBConnect.getJDBCConnection();
              PreparedStatement st = connection.prepareStatement("SELECT T_TDN, T_EMAIL FROM TA_LPN_ACCOUNT WHERE T_TDN = ? OR T_EMAIL = ?");
              st.setString(1, email);
@@ -73,7 +68,7 @@ public class AccountDAO {
                  insertStatement.setString(4, mk);
                  insertStatement.executeUpdate();
 
-                 setResult1("success");
+                 setResult("success");
                  return "success"; // Trả về "success" khi đăng ký thành công
              }
          } catch (SQLException sqlException) {
@@ -81,6 +76,14 @@ public class AccountDAO {
              throw new RuntimeException("Lỗi khi thực hiện truy vấn SQL", sqlException);
          }
      }
+    
+    public void setResult(String result) {
+        this.result = result;
+    }
+    public String getResult() {
+        return result;
+    }
+    
     public void setResult1(String result1) {
         this.result1 = result1;
     }

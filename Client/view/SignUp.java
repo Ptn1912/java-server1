@@ -27,7 +27,7 @@ public class SignUp extends JFrame {
 
 	public SignUp() {
 		init();
-        SignUpController control = new SignUpController(btnAccountSurvivaled, btnConfirm, this, textField_1,textField_3,textField_2,passwordField_1,passwordField_2);
+        SignUpController control = new SignUpController(btnAccountSurvivaled, btnConfirm, this, textField_1,textField_2, textField_3,passwordField_1,passwordField_2);
         control.setEvent();
 	}
 	

@@ -33,12 +33,10 @@ public class SignInControler {
         this.signIn = signIn;
         this.textField=textField;
         this.passwordField=passwordField;
-        setEvent();
     }
     
     public SignInControler(String receiver) {
-        
-            this.result = receiver;
+    	this.result = receiver;
         
     }
     public void setEvent() {
@@ -82,7 +80,7 @@ public class SignInControler {
                     if (userName.isEmpty() || password.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Tên đăng nhập hoặc mật khẩu trống!");
                     } else {
-                        Client client = new Client(userName, password, btnSignUp, btnSignIn, signIn, textField, passwordField);
+                        Client client = new Client(userName, password, "login");
                         client.startClient();
 
                         String currentResult = client.getResult();
@@ -117,8 +115,7 @@ public class SignInControler {
 	    }
 		
 	    public String getResult() {
-	       
-	        return result;
+	    	return result;
 	    }
 
 
