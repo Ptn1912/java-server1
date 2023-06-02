@@ -100,25 +100,29 @@ public class SignUpController {
                 	} else if (!textField_1.getText().endsWith("@gmail.com")) {
                 	    JOptionPane.showMessageDialog(null, "Email vừa nhập không đúng định dạng!");
                 	} else {
-			    	 Client client = new Client(email, tdn, tnd, mk, mkagain, "register");
-                     client.startClient();
-
-                     String currentResult = client.getResult();
-                     System.out.print("moi:"+currentResult);
-                     if ("exists".equals(currentResult)) {
-                    	   JOptionPane.showMessageDialog(null, "Tài khoản đã tồn tại!");
-                     }else if("success".equals(currentResult)) {
-			        JOptionPane.showMessageDialog(signUp, "Đăng kí thành công!");
-			        signUp.dispose();
-               	SignIn dn=new SignIn();
-               	dn.setVisible(true);
-			    }
-			    }
-			} catch (IOException e1) {
-			    e1.printStackTrace();
+				    	 Client client = new Client(email, tdn, tnd, mk, mkagain, "register");
+	                     client.startClient();
+	
+	                     String currentResult = client.getResult();
+	                     System.out.print("moi:"+currentResult);
+	                     if ("exists email".equals(currentResult)) {
+	                    	JOptionPane.showMessageDialog(null, "Email đã tồn tại!");
+	                     }else if("exists tdn".equals(currentResult)) {
+	                    	 JOptionPane.showMessageDialog(null, "Tên đăng nhập đã tồn tại!");
+	                     }else if("exists tnd".equals(currentResult)) {
+	                    	 JOptionPane.showMessageDialog(null, "Tên người dùng đã tồn tại!");
+	                     }else if("success".equals(currentResult)) {
+					        JOptionPane.showMessageDialog(signUp, "Đăng kí thành công!");
+					        signUp.dispose();
+			               	SignIn dn=new SignIn();
+			               	dn.setVisible(true);
+					    }
+                	}
+				} catch (IOException e1) {
+				    e1.printStackTrace();
+				}
 			}
-		}
-		
+			
 	});
 	}
 	public String getEmail() {

@@ -25,18 +25,21 @@ public class AccountDAO {
 	public String checkLogin() {
 	    try {
 	        Connection connection = DBConnect.getJDBCConnection();
-	        PreparedStatement st = connection.prepareStatement("SELECT T_TDN, T_MK FROM TA_LPN_ACCOUNT WHERE T_TDN = ? AND T_MK = ?");
-	        st.setString(1, userName);
-	        st.setString(2, password);
-	        ResultSet rs = st.executeQuery();
-	        if (rs.next()) {
-	        	if(userName.isEmpty()||password.isEmpty()) {
-	        		setResult("rong");
-	        		return "rong";
-	        	}
-	        	else{
-	        		setResult("ok"); 
-	        		return "ok"; 
+	        
+	        PreparedStatement typeStatement = connection.prepareStatement("SELECT T_TYPE FROM TA_LPN_ACCOUNT WHERE T_TDN = ? AND T_MK = ?");
+	        typeStatement.setString(1, userName);
+	        typeStatement.setString(2, password);
+	        ResultSet typeResult = typeStatement.executeQuery();
+	        if (typeResult.next()) {
+	        	String type = typeResult.getString("T_TYPE");
+	        	if(type.equals("us")){
+	        		setResult("ok user"); 
+	        		return "ok user"; 
+	        	}else if(type.equals("ad")) {
+	        		setResult("ok admin"); 
+	        		return "ok admin"; 
+	        	}else {
+	        		return null;
 	        	}
 	            // Trả về "ok" khi đăng nhập thành công
 	        } else {
@@ -52,14 +55,28 @@ public class AccountDAO {
     public String checkSignup() {
     	try {
              Connection connection = DBConnect.getJDBCConnection();
-             PreparedStatement st = connection.prepareStatement("SELECT T_EMAIL,T_TDN FROM TA_LPN_ACCOUNT WHERE T_EMAIL= ? OR T_TDN = ?");
-             st.setString(1, email);
-             st.setString(2, tdn);
-             ResultSet rs = st.executeQuery();
-             if (rs.next()) {
-                 setResult1("exists");
-                 return "exists"; // Trả về "exists" khi tên đăng nhập hoặc email đã tồn tại
-             } else {
+             PreparedStatement emailStatement = connection.prepareStatement("SELECT T_EMAIL FROM TA_LPN_ACCOUNT WHERE T_EMAIL= ?");
+             emailStatement.setString(1, email);
+             ResultSet emailResult = emailStatement.executeQuery();
+             
+             PreparedStatement tdnStatement = connection.prepareStatement("SELECT T_TDN FROM TA_LPN_ACCOUNT WHERE T_TDN= ?");
+             tdnStatement.setString(1, tdn);
+             ResultSet tdnResult = tdnStatement.executeQuery();
+             
+             PreparedStatement tndStatement = connection.prepareStatement("SELECT T_TND FROM TA_LPN_ACCOUNT WHERE T_TND= ?");
+             tndStatement.setString(1, tnd);
+             ResultSet tndResult = tndStatement.executeQuery();
+             
+             if (emailResult.next()) {
+                 setResult("exists email");
+                 return "exists email"; // Trả về "exists" khi email đã tồn tại
+             }else if(tdnResult.next()) {
+            	 setResult("exists tdn");
+                 return "exists tdn";
+             }else if(tndResult.next()) {
+            	 setResult("exists tnd");
+                 return "exists tnd";
+             }else {
                  // Tiến hành đăng ký tài khoản
                  PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO TA_LPN_ACCOUNT(T_EMAIL,T_TDN,T_TND,T_MK) VALUES (?, ?, ?, ?)");
                  insertStatement.setString(1, email);

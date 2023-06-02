@@ -85,12 +85,18 @@ public class SignInControler {
 
                         String currentResult = client.getResult();
                         System.out.print("moi:"+currentResult);
-                        if ("ok".equals(currentResult)) {
+                        if ("ok user".equals(currentResult)) {
                             JOptionPane.showMessageDialog(null, "Bạn đã đăng nhập thành công");
                             signIn.dispose();
                             MainPage mp = new MainPage();
                             mp.setVisible(true);
-                        } else {
+                        }else if ("ok admin".equals(currentResult)) {
+                            JOptionPane.showMessageDialog(null, "Bạn đã đăng nhập thành công");
+                            signIn.dispose();
+                            StartServer ss = new StartServer();
+                            ss.setVisible(true);
+                        }
+                        else {
                             JOptionPane.showMessageDialog(null, "User hoặc password sai!");
                         }
                     }

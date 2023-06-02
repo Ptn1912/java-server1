@@ -43,7 +43,7 @@ public class ThreadServer extends Thread {
             	check = account.checkLogin();
             }else if(signal.equals("register")) {
             	AccountDAO account = new AccountDAO(email, tdn, tnd, mk, mkagain);
-            	account.checkSignup();
+            	check = account.checkSignup();
             }
             System.out.println(check);
             dop.writeUTF(check);
