@@ -34,6 +34,8 @@ public class StartServer extends JFrame {
 	private DefaultTableModel tableModel;
 	private JTextField textField;
 	private int selectedRow = -1;
+	private JButton btnStart, btnStop;
+	private JLabel jlb_textShow;
 	/**
 	 * Launch the application.
 	 */
@@ -61,6 +63,13 @@ public class StartServer extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		btnStart = new JButton("START");
+		btnStart.setForeground(new Color(0, 255, 0));
+		btnStart.setFont(new Font("Tahoma", Font.BOLD, 24));
+		btnStart.setBackground(Color.WHITE);
+		btnStart.setBounds(523, 42, 239, 57);
+		contentPane.add(btnStart);
 		JPanel panel = new JPanel();
 		panel.setBounds(50, 21, 414, 177);
 		contentPane.add(panel);
@@ -75,29 +84,18 @@ public class StartServer extends JFrame {
         tableModel.addColumn("Điểm");
         
         
-		JLabel lblNewLabel = new JLabel("Server đang ");
-		lblNewLabel.setBackground(new Color(0, 255, 64));
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 40));
-		lblNewLabel.setBounds(87, 8, 357, 79);
-		panel.add(lblNewLabel);
+		jlb_textShow = new JLabel("...");
+		jlb_textShow.setBackground(new Color(0, 255, 64));
+		jlb_textShow.setFont(new Font("Tahoma", Font.BOLD, 40));
+		jlb_textShow.setBounds(10, 51, 394, 79);
+		panel.add(jlb_textShow);
 		
-		JLabel lblNewLabel_1 = new JLabel("chạy ...");
-		lblNewLabel_1.setBackground(new Color(0, 255, 64));
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 40));
-		lblNewLabel_1.setBounds(137, 95, 251, 67);
-		panel.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_2 = new JLabel("Dừng Server");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblNewLabel_2.setBounds(584, 31, 238, 67);
-		contentPane.add(lblNewLabel_2);
-		
-		JButton btnNewButton = new JButton("STOP");
-		btnNewButton.setBackground(new Color(255, 255, 255));
-		btnNewButton.setForeground(new Color(255, 0, 0));
-		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 24));
-		btnNewButton.setBounds(584, 118, 178, 57);
-		contentPane.add(btnNewButton);
+		btnStop = new JButton("STOP");
+		btnStop.setBackground(new Color(255, 255, 255));
+		btnStop.setForeground(new Color(255, 0, 0));
+		btnStop.setFont(new Font("Tahoma", Font.BOLD, 24));
+		btnStop.setBounds(523, 122, 239, 57);
+		contentPane.add(btnStop);
 		
 		JButton btntimkiem = new JButton("Tìm kiếm");
 		btntimkiem.addActionListener(new ActionListener() {
@@ -170,6 +168,9 @@ public class StartServer extends JFrame {
 		contentPane.add(btnNewButton_1);
 		fetchDataFromMySQL();
 		setVisible(true);
+		
+		StartServerControler control = new StartServerControler(btnStart, btnStop, jlb_textShow);
+		control.setEvent();
 	}
 	private void fetchDataFromMySQL() {
 	        try {
@@ -227,5 +228,4 @@ public class StartServer extends JFrame {
 	        e.printStackTrace();
 	    }
 	}
-
 }
