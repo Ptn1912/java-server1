@@ -33,7 +33,7 @@ public class Client {
     }
     
 	public void startClient() throws IOException {
-        Socket socket = new Socket("localhost", 9500);
+        Socket socket = new Socket("localhost", 9600);
         
         if(signal.equals("login")) {
         	this.threadClient = new ThreadClient(socket, userName, password, signal);

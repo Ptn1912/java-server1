@@ -1,8 +1,12 @@
 package view;
 
 import java.awt.Color;
+
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,12 +16,15 @@ import java.util.LinkedList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import model.Pawn;
 import model.Piece;
 
 public class Board {
+	public static ArrayList<Piece> ps = new ArrayList<>();
+	public static Piece selectedPiece=null;
 public static void main(String[] args) throws IOException {
-	ArrayList<Piece> ps = new ArrayList<>();
-	BufferedImage all=ImageIO.read(new File("C:\\Users\\Msi\\OneDrive\\Documents\\java-server1\\Client\\images\\chess.png"));
+	
+	BufferedImage all=ImageIO.read(new File("C:\\Users\\Msi\\Documents\\java-server1\\Client\\images\\chess.png"));
     Image imgs[]=new Image[12];
    int ind=0;
     for(int y=0;y<400;y+=200){
@@ -110,13 +117,84 @@ public static void main(String[] args) throws IOException {
                 if(!p.isWhite()){
                     ind+=6;
                 }
-                g.drawImage(imgs[ind], p.getXp()*64, p.getYp()*64, this);
+                g.drawImage(imgs[ind], p.x, p.y, this);
 			}
 		}
 		
 	};
 	frame.add(pn);
+	frame.addMouseMotionListener(new MouseMotionListener() {
+		
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			if(selectedPiece!=null)
+			{
+				selectedPiece.x=e.getX()-32;
+				selectedPiece.y=e.getY()-32;
+				frame.repaint();
+			}
+			
+		}
+	});
+	frame.addMouseListener(new MouseListener() {
+		
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			  selectedPiece.move(e.getX()/64,e.getY()/64);
+			  frame.repaint();
+		}
+		
+		@Override
+		public void mousePressed(MouseEvent e) {
+//			 System.out.println(getPiece(e.getX(), e.getY()).getName());
+			
+			if(getPiece(e.getX(),e.getY()).getName()=="pawn")
+			{
+				Pawn pawn = (Pawn) selectedPiece;;
+				pawn.move(e.getX()+1, e.getY()+1);
+			}
+		}
+		
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			selectedPiece=getPiece(e.getX(),e.getY());
+			
+		}
+	});
 	frame.setDefaultCloseOperation(3);
 	frame.setVisible(true);
 }
+public static Piece getPiece(int x, int y)
+{
+	int xp=x/64;
+	int yp=y/64;
+	
+	for (Piece p:ps)
+	{
+		if(p.getXp()==xp && p.getYp()==yp)
+		{
+			return p;
+		}
+	}
+	return null;
+}
+
 }

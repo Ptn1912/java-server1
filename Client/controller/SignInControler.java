@@ -84,7 +84,7 @@ public class SignInControler {
                         client.startClient();
 
                         String currentResult = client.getResult();
-                        System.out.print("moi:"+currentResult);
+                       
                         if ("ok user".equals(currentResult)) {
                             JOptionPane.showMessageDialog(null, "Bạn đã đăng nhập thành công");
                             signIn.dispose();

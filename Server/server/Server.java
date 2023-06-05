@@ -10,7 +10,7 @@ public class Server {
 	private boolean isServerRunning;
 
 	public void startServer() throws IOException {
-	    serverSocket = new ServerSocket(9500);
+	    serverSocket = new ServerSocket(9600);
 	    isServerRunning = true;
 	    System.out.println("da chay server thanh cong");
 	    try {

@@ -1,11 +1,17 @@
 package model;
 
 import java.util.ArrayList;
+
 import java.util.LinkedList;
+
+import view.Board;
 
 public class Piece {
    private int xp;
    private int yp;
+   public int x;
+  public int y;
+   
   private boolean isWhite;
   ArrayList<Piece> ps;
   private String name;
@@ -13,6 +19,8 @@ public Piece(int xp, int yp, boolean isWhite,String n, ArrayList<Piece> ps) {
 	super();
 	this.xp = xp;
 	this.yp = yp;
+	x=xp*64;
+	y=yp*64;
 	this.isWhite = isWhite;
 	name=n;
 	this.ps=ps;
@@ -59,21 +67,32 @@ public void setName(String name) {
 	this.name = name;
 }
 
+
+
 public void move(int xp, int yp)
 
  {
-	 for(Piece p:ps)
-	 {
-		 if (p.xp==xp && p.yp==yp)
-		 {
-			 p.kill();
-		 }
-	 }
+	if(Board.getPiece(xp*64, yp*64) !=null)
+	{
+		if(Board.getPiece(xp*64, yp*64).isWhite!=isWhite)
+		{
+		  Board.getPiece(xp*64, yp*64).kill();
+		  
+		}
+		else
+		{
+			 x=this.xp*64;
+			 y=this.yp*64;
+			 return;
+		}
+	}
 	 this.xp=xp;
 	 this.yp=yp;
+	 x=xp*64;
+	 y=yp*64;
  }
  public void kill()
  {
-	 
+	 ps.remove(this);
  }
 }

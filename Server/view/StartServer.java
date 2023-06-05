@@ -56,7 +56,7 @@ public class StartServer extends JFrame {
 	 * Create the frame.
 	 */
 	public StartServer() {
-
+		setTitle("Server");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 836, 512);
 		contentPane = new JPanel();
