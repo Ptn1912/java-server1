@@ -8,7 +8,7 @@ import view.MainPage;
 
 public class AccountDAO {
 	private String userName, password;
-	private String result,result1;
+	private String result,resultTND;
 	private String email,tdn,tnd,mk,mkagain;
 	public AccountDAO(String userName, String password) {
 		this.userName = userName;
@@ -22,29 +22,26 @@ public class AccountDAO {
 		this.mkagain = mkagain;
 	}
 
-	public String checkLogin() {
+	public void checkLogin() {
 	    try {
 	        Connection connection = DBConnect.getJDBCConnection();
 	        
-	        PreparedStatement typeStatement = connection.prepareStatement("SELECT T_TYPE FROM TA_LPN_ACCOUNT WHERE T_TDN = ? AND T_MK = ?");
-	        typeStatement.setString(1, userName);
-	        typeStatement.setString(2, password);
-	        ResultSet typeResult = typeStatement.executeQuery();
-	        if (typeResult.next()) {
-	        	String type = typeResult.getString("T_TYPE");
+	        PreparedStatement Statement = connection.prepareStatement("SELECT T_TYPE, T_TND FROM TA_LPN_ACCOUNT WHERE T_TDN = ? AND T_MK = ?");
+	        Statement.setString(1, userName);
+	        Statement.setString(2, password);
+	        ResultSet Result = Statement.executeQuery();
+	        if (Result.next()) {
+	        	String type = Result.getString("T_TYPE");
+	        	String tnd = Result.getString("T_TND");
 	        	if(type.equals("us")){
 	        		setResult("ok user"); 
-	        		return "ok user"; 
+	        		setResultTND(tnd);
 	        	}else if(type.equals("ad")) {
 	        		setResult("ok admin"); 
-	        		return "ok admin"; 
-	        	}else {
-	        		return null;
+	        		setResultTND(tnd);
 	        	}
-	            // Trả về "ok" khi đăng nhập thành công
 	        } else {
 	            setResult("failed"); // Đăng nhập không thành công, gọi phương thức setResult()
-	            return "failed"; // Trả về "failed" khi tên đăng nhập hoặc mật khẩu sai
 	        }
 	    } catch (SQLException sqlException) {
 	        // Ném lại ngoại lệ hoặc trả về giá trị mặc định
@@ -101,11 +98,11 @@ public class AccountDAO {
         return result;
     }
     
-    public void setResult1(String result1) {
-        this.result1 = result1;
+    public void setResultTND(String tnd) {
+        this.resultTND = tnd;
     }
-    public String getResult1() {
-        return result1;
+    public String getResultTND() {
+        return resultTND;
     }
 
 

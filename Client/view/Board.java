@@ -17,7 +17,8 @@ import model.Piece;
 public class Board {
 public static void main(String[] args) throws IOException {
 	ArrayList<Piece> ps = new ArrayList<>();
-	BufferedImage all=ImageIO.read(new File("C:\\Users\\Msi\\OneDrive\\Documents\\java-server1\\Client\\images\\chess.png"));
+	String relativePath = "D:/JAVA/java-server1/Client/images/chess.png";
+	BufferedImage all = ImageIO.read(new File(relativePath));
     Image imgs[]=new Image[12];
    int ind=0;
     for(int y=0;y<400;y+=200){

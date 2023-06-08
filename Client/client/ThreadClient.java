@@ -20,7 +20,9 @@ public class ThreadClient extends Thread {
     private String userName, password;
     private String email, tdn, tnd, mk, mkagain;
     private String signal;
-    private String result;
+    private String signalRoom;
+    private String result, resultTND, resultRoom;
+    
     public ThreadClient(Socket socket, String userName, String password, String signal) {
         this.socket = socket;
         this.userName = userName;
@@ -38,28 +40,40 @@ public class ThreadClient extends Thread {
         this.signal = signal;
     }
     
+    public ThreadClient(Socket socket, String signalRoom) {
+    	this.socket = socket;
+    	this.signalRoom = signalRoom;
+    }
+    
 	@Override
     public void run() {
         try {
             DataInputStream dip = new DataInputStream(socket.getInputStream());
             DataOutputStream dop = new DataOutputStream(socket.getOutputStream());
             
-            dop.writeUTF(signal);
-            if(signal .equals("login")) {
-            	dop.writeUTF(userName);
-                dop.writeUTF(password);
-            }else if(signal.equals("register")) {
-            	dop.writeUTF(email);
-            	dop.writeUTF(tdn);
-            	dop.writeUTF(tnd);
-            	dop.writeUTF(mk);
-            	dop.writeUTF(mkagain);
+            if(signal != null) {
+            	dop.writeUTF(signal);
+                if(signal .equals("login")) {
+                	dop.writeUTF(userName);
+                    dop.writeUTF(password);
+                }else if(signal.equals("register")) {
+                	dop.writeUTF(email);
+                	dop.writeUTF(tdn);
+                	dop.writeUTF(tnd);
+                	dop.writeUTF(mk);
+                	dop.writeUTF(mkagain);
+                }
+                
+                result = dip.readUTF();
+                resultTND = dip.readUTF();
+               
             }
             
-            result = dip.readUTF(); 
-           
-            SignInControler control = new SignInControler(result);
-            control.setResult(result);
+            if(signalRoom != null) {
+            	dop.writeUTF(signalRoom);
+            	resultRoom = dip.readUTF();
+            	System.out.println(resultRoom);
+            }
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,5 +83,18 @@ public class ThreadClient extends Thread {
     public String getResult() {
         return result;
     }
+    
+    public String getResultRoom() {
+    	return resultRoom;
+    }
+    
+    public void setResultTND(String resultTND) {
+    	this.resultTND = resultTND;
+    }
+    
+    public String getResultTND() {
+        return resultTND;
+    }
+    
 }
 

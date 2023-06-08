@@ -23,7 +23,8 @@ public class WaitRoom extends JFrame {
 
 	public WaitRoom() {
 		init();
-		WaitRoomController control = new WaitRoomController(btnHome, this);
+		WaitRoomController control = new WaitRoomController(btnHome, this, panel_room1, panel_room2, panel_room3, 
+															panel_room4, panel_room5, panel_room6, panel_room7, panel_room8);
 		control.setEvent();
 	}
 	
