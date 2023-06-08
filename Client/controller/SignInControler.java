@@ -92,6 +92,7 @@ public class SignInControler {
                         String tND = client.getResultTND();
                         setResultTND(tND);
                         System.out.print("moi:"+currentResult + " " + tND);
+
                         if ("ok user".equals(currentResult)) {
                             JOptionPane.showMessageDialog(null, "Bạn đã đăng nhập thành công");
                             signIn.dispose();
