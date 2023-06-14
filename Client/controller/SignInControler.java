@@ -25,7 +25,7 @@ public class SignInControler {
     private JButton btnSignUp, btnSignIn;
     private JTextField textField;
     private JPasswordField passwordField;
-    private String result;
+    private String result, resultTND;
     private String userName, password;
     public SignInControler(JButton btnSignUp, JButton btnSignIn, JFrame signIn,JTextField textField,JPasswordField passwordField) {
         this.btnSignUp = btnSignUp;
@@ -39,6 +39,11 @@ public class SignInControler {
     	this.result = receiver;
         
     }
+    
+    public SignInControler() {
+    	
+    }
+    
     public void setEvent() {
         btnSignUp.addMouseListener(new MouseAdapter() {
             @Override
@@ -84,7 +89,10 @@ public class SignInControler {
                         client.startClient();
 
                         String currentResult = client.getResult();
-                       
+                        String tND = client.getResultTND();
+                        setResultTND(tND);
+                        System.out.print("moi:"+currentResult + " " + tND);
+
                         if ("ok user".equals(currentResult)) {
                             JOptionPane.showMessageDialog(null, "Bạn đã đăng nhập thành công");
                             signIn.dispose();
@@ -116,13 +124,22 @@ public class SignInControler {
         String password = new String(passwordField.getPassword());
         return password;
     }
-	    public void setResult(String result) {
-	        this.result = result;
-	    }
+    
+	public void setResult(String result) {
+	    this.result = result;
+	}
 		
-	    public String getResult() {
-	    	return result;
-	    }
+	public String getResult() {
+		return result;
+	}
+	
+	public void setResultTND(String resultTND) {
+		this.resultTND = resultTND;
+	}
+	
+	public String getResultTND() {
+		return resultTND;
+	}
 
 
 }
