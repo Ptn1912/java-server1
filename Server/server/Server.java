@@ -5,12 +5,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import model.WaitRoomModel;
-import view.WaitRoom;
 
 public class Server {
-	private ServerSocket serverSocket;
+
+    public static volatile ServerThreadBus serverThreadBus;
+    private ServerSocket serverSocket;
 	private List<WaitRoomModel> waitRooms;
 	private boolean isServerRunning;
 	
@@ -23,6 +27,7 @@ public class Server {
 
 	public void startServer() throws IOException {
 	    serverSocket = new ServerSocket(9500);
+	    int clientNumber = 0;
 	    startWaitRoom();
 	    isServerRunning = true;
 	    System.out.println("da chay server thanh cong");
@@ -30,7 +35,9 @@ public class Server {
 	        while (isServerRunning) {
 	            Socket clientSocket = serverSocket.accept();
 	            System.out.println("Một client mới đã kết nối: " + clientSocket);
-	            ThreadServer threadServer = new ThreadServer(clientSocket, waitRooms);
+	            ServerThread threadServer = new ServerThread(clientSocket, waitRooms, clientNumber++);
+	            serverThreadBus.add(threadServer);
+                System.out.println("Số thread đang chạy là: "+serverThreadBus.getLength());
 	            threadServer.start();
 	        }
 	    } catch (SocketException e) {
@@ -51,5 +58,4 @@ public class Server {
 	        }
 	    }
 	}
-
 }

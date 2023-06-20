@@ -91,7 +91,3 @@ public class Client {
         return resultTND;
     }
 }
-
-
-
-

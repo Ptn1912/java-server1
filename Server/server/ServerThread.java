@@ -15,7 +15,7 @@ import view.WaitRoom;
 import java.util.*;
 import java.util.regex.Matcher;
 
-public class ThreadServer extends Thread {
+public class ServerThread extends Thread {
     private Socket socket;
     private String userName, password;
     private String signal;
@@ -23,17 +23,21 @@ public class ThreadServer extends Thread {
     private String signalRoom;
     private List<WaitRoomModel> waitRooms;
     private WaitRoomModel currentWaitRoom;
+    private int clientNumber;
+    private DataInputStream dip;
+    private DataOutputStream dop;
 
-    public ThreadServer(Socket socketClient, List<WaitRoomModel> waitRooms) {
+    public ServerThread(Socket socketClient, List<WaitRoomModel> waitRooms,int clientNumber ) {
         this.socket = socketClient;
         this.waitRooms = waitRooms;
+        this.clientNumber = clientNumber;
     }
 
 	@Override
     public void run() {
         try {
-            DataInputStream dip = new DataInputStream(socket.getInputStream());
-            DataOutputStream dop = new DataOutputStream(socket.getOutputStream());
+            dip = new DataInputStream(socket.getInputStream());
+            dop = new DataOutputStream(socket.getOutputStream());
             
             String receivedSignal = dip.readUTF();
   
@@ -102,12 +106,22 @@ public class ThreadServer extends Thread {
             e.printStackTrace();
         }
     }
-    
-    public int getPort() {
+	
+	public int getPort() {
         return socket.getPort();
     }
-
+	
 	public void sendMessage(String string) {
 		System.out.println(string);
 	}
+	
+	public void write(String message) throws IOException{
+	        dop.writeUTF(message);
+	        dop.flush();
+	}
+	
+	public int getClientNumber() {
+        return clientNumber;
+    }
+
 }

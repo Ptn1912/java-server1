@@ -3,11 +3,11 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import client.ThreadClient;
-import server.ThreadServer;
+import server.ServerThread;
 
 public class WaitRoomModel {
 	private int id;
-	private List<ThreadServer> clients;
+	private List<ServerThread> clients;
 	
 	public WaitRoomModel(int id) {
 		this.id = id;
@@ -15,17 +15,17 @@ public class WaitRoomModel {
 	}
 	
 	public boolean isFull() {
-		return clients.size() >= 2;
+	    return clients.size() >= 2;
 	}
 	
-	public void addClient(ThreadServer client) {
+	public void addClient(ServerThread client) {
 		clients.add(client);
 	}
 	
-	public void broadcastMessage(ThreadServer sender, String message) {
-        for (ThreadServer client : clients) {
+	public void broadcastMessage(ServerThread sender, String message) {
+        for (ServerThread client : clients) {
             if (client != sender) {
-                client.sendMessage("Client " + sender.getPort() + ": " + message);
+                client.sendMessage("Client " + String.valueOf(sender.getPort()) + ": " + message);
             }
         }
     }

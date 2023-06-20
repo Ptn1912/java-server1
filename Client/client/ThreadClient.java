@@ -51,30 +51,32 @@ public class ThreadClient extends Thread {
             DataInputStream dip = new DataInputStream(socket.getInputStream());
             DataOutputStream dop = new DataOutputStream(socket.getOutputStream());
             
-            if(signal != null) {
-            	dop.writeUTF(signal);
-                if(signal .equals("login")) {
-                	dop.writeUTF(userName);
-                    dop.writeUTF(password);
-                }else if(signal.equals("register")) {
-                	dop.writeUTF(email);
-                	dop.writeUTF(tdn);
-                	dop.writeUTF(tnd);
-                	dop.writeUTF(mk);
-                	dop.writeUTF(mkagain);
+            while(true) {
+            	if(signal != null) {
+                	dop.writeUTF(signal);
+                	System.out.println(signal);
+                    if(signal .equals("login")) {
+                    	dop.writeUTF(userName);
+                        dop.writeUTF(password);
+                    }else if(signal.equals("register")) {
+                    	dop.writeUTF(email);
+                    	dop.writeUTF(tdn);
+                    	dop.writeUTF(tnd);
+                    	dop.writeUTF(mk);
+                    	dop.writeUTF(mkagain);
+                    }
+                    
+                    result = dip.readUTF();
+                    resultTND = dip.readUTF();
+                   
                 }
                 
-                result = dip.readUTF();
-                resultTND = dip.readUTF();
-               
+                if(signalRoom != null) {
+                	dop.writeUTF(signalRoom);
+                	resultRoom = dip.readUTF();
+                	System.out.println(resultRoom);
+                }
             }
-            
-            if(signalRoom != null) {
-            	dop.writeUTF(signalRoom);
-            	resultRoom = dip.readUTF();
-            	System.out.println(resultRoom);
-            }
-            socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
