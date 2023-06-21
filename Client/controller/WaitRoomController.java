@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 
 import client.Client;
 import client.ThreadClient;
+import view.GamePanel;
 import view.ModePlay;
 
 public class WaitRoomController implements Controller{
@@ -85,7 +86,7 @@ public class WaitRoomController implements Controller{
          String resultRoom = thClient.getResultRoom();
          String tND = thClient.getResultTND();
          if(resultRoom.equals("success")) {
-        	 
+        	 GamePanel gamePanel = new GamePanel(client);
          	JOptionPane.showMessageDialog(null, "bạn đã tham gia phòng 1 /n Xin chào " + tND);
          }else {
          	JOptionPane.showMessageDialog(null, "Xin lỗi \n Phòng hiện tại đã đầy");
