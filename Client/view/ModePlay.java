@@ -4,6 +4,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import client.Client;
+
 import javax.swing.UIManager;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -20,10 +23,13 @@ public class ModePlay extends JFrame {
 	private JButton bntComputer;
 	private JButton btnPlayer;
 	private JButton btnHome;
+	private Client client;
 
-	public ModePlay() {
+	public ModePlay(Client client) {
+		this.client = client;
 		init();
 		ModePlayController control = new ModePlayController(bntComputer, btnPlayer, btnHome, this);
+		control.doSetClient(client);
 		control.setEvent();
 	}
 	

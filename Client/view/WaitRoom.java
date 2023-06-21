@@ -4,6 +4,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import client.Client;
+
 import javax.swing.UIManager;
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -20,11 +23,13 @@ public class WaitRoom extends JFrame {
 	jlb_Room4_Icon2, jlb_Room4_Icon1, jlb_text4, jlb_Room5_Icon2, jlb_Room5_Icon1, jlb_text5, jlb_Room6_Icon2, jlb_Room6_Icon1, jlb_text6,
 	jlb_Room7_Icon2, jlb_Room7_Icon1, jlb_text7, jlb_Room8_Icon2, jlb_Room8_Icon1, jlb_text8, jlb_Title;
 	private JButton btnHome;
-
-	public WaitRoom() {
+	private Client client;
+	public WaitRoom(Client client) {
+		this.client=client;
 		init();
 		WaitRoomController control = new WaitRoomController(btnHome, this, panel_room1, panel_room2, panel_room3, 
 															panel_room4, panel_room5, panel_room6, panel_room7, panel_room8);
+		control.doSetClient(client);
 		control.setEvent();
 	}
 	

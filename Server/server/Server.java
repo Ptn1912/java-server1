@@ -13,7 +13,7 @@ import model.WaitRoomModel;
 
 public class Server {
 
-    public static volatile ServerThreadBus serverThreadBus;
+    public static ServerThreadBus serverThreadBus = new ServerThreadBus();
     private ServerSocket serverSocket;
 	private List<WaitRoomModel> waitRooms;
 	private boolean isServerRunning;

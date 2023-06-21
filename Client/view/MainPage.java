@@ -4,6 +4,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import client.Client;
+
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.Color;
@@ -17,10 +20,13 @@ public class MainPage extends JFrame {
 	private JPanel contentPane, panel_img, panel_nav;
 	private JLabel jlb_text, jlb_img;
 	private JButton btnRank, btnMode, btnGuide, btnExit;
+	private Client client;
 	
-	public MainPage() {
+	public MainPage(Client client) {
+		this.client = client;
 		init();
 		MainPageController control = new MainPageController(btnRank, btnMode, btnGuide, btnExit, this);
+		control.doSetClient(client);
 		control.setEvent();
 	}
 	

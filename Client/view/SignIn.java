@@ -1,28 +1,20 @@
 package view;
 
-import java.awt.EventQueue;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.ImageIcon;
-import java.awt.Font;
 import java.awt.Color;
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
+import java.awt.Font;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import controller.*;
-import dao.DBConnect;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
-
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.awt.event.ActionEvent;
+import client.Client;
+import controller.SignInControler;
 
 
 public class SignIn extends JFrame {
@@ -33,9 +25,12 @@ public class SignIn extends JFrame {
 	private JPasswordField passwordField;
 	private JButton btnSignUp, btnSignIn;
 
-	public SignIn() {
+	private Client client;
+	public SignIn(Client client) {
+		this.client = client;
 		init();
 		SignInControler control = new SignInControler(btnSignUp, btnSignIn, this, textField, passwordField);
+		control.doSetClient(client);
 		control.setEvent();
 		
 	}

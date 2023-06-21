@@ -4,9 +4,12 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+
+import client.Client;
+import client.ThreadClient;
 import view.*;
 
-public class ModePlayController {
+public class ModePlayController implements Controller{
 	private JFrame modePlay;
 	private JButton bntComputer, btnPlayer, btnHome;
 	
@@ -57,7 +60,7 @@ public class ModePlayController {
 			
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent e) {
-				WaitRoom jframeWaitRoom = new WaitRoom();
+				WaitRoom jframeWaitRoom = new WaitRoom(client);
 				modePlay.dispose();
 			}
 		});
@@ -79,9 +82,18 @@ public class ModePlayController {
 			
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent e) {
-				MainPage jframeMainPage = new MainPage();
+				MainPage jframeMainPage = new MainPage(client);
 				modePlay.dispose();
 			}
 		});
+	}
+	
+public void doCallback(ThreadClient thClient) {
+		
+	}
+	
+	private Client client;
+	public void doSetClient(Client client) {
+		this.client = client;
 	}
 }

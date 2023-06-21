@@ -4,9 +4,12 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+
+import client.Client;
+import client.ThreadClient;
 import view.*;
 
-public class MainPageController {
+public class MainPageController implements Controller{
 	private JFrame mainPage;
 	private JButton btnRank, btnMode, btnGuide, btnExit;
 	
@@ -58,7 +61,7 @@ public class MainPageController {
 			
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent e) {
-				ModePlay jframeModePlay = new ModePlay();
+				ModePlay jframeModePlay = new ModePlay(client);
 				mainPage.dispose();
 			}
 		});
@@ -107,5 +110,14 @@ public class MainPageController {
 				
 			}
 		});
+	}
+	
+	public void doCallback(ThreadClient thClient) {
+		
+	}
+	
+	private Client client;
+	public void doSetClient(Client client) {
+		this.client = client;
 	}
 }

@@ -1,13 +1,8 @@
 package controller;
 
 import java.awt.Color;
-import java.awt.Dialog;
 import java.awt.event.MouseAdapter;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,17 +11,21 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import client.Client;
-import dao.DBConnect;
+import client.ThreadClient;
+import view.MainPage;
+import view.SignUp;
+import view.StartServer;
 
-import view.*;
-
-public class SignInControler {
+public class SignInControler implements Controller{
+	
     private JFrame signIn;
     private JButton btnSignUp, btnSignIn;
     private JTextField textField;
     private JPasswordField passwordField;
     private String result, resultTND;
     private String userName, password;
+   
+    private SignInControler self=this;
     public SignInControler(JButton btnSignUp, JButton btnSignIn, JFrame signIn,JTextField textField,JPasswordField passwordField) {
         this.btnSignUp = btnSignUp;
         this.btnSignIn = btnSignIn;
@@ -85,35 +84,16 @@ public class SignInControler {
                     if (userName.isEmpty() || password.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Tên đăng nhập hoặc mật khẩu trống!");
                     } else {
-                        Client client = new Client(userName, password, "login");
-                        client.startClient();
-
-                        String currentResult = client.getResult();
-                        String tND = client.getResultTND();
-                        setResultTND(tND);
-                        System.out.print("moi:"+currentResult + " " + tND);
-
-                        if ("ok user".equals(currentResult)) {
-                            JOptionPane.showMessageDialog(null, "Bạn đã đăng nhập thành công");
-                            signIn.dispose();
-                            MainPage mp = new MainPage();
-                            mp.setVisible(true);
-                        }else if ("ok admin".equals(currentResult)) {
-                            JOptionPane.showMessageDialog(null, "Bạn đã đăng nhập thành công");
-                            signIn.dispose();
-                            StartServer ss = new StartServer();
-                            ss.setVisible(true);
-                        }
-                        else {
-                            JOptionPane.showMessageDialog(null, "User hoặc password sai!");
-                        }
+                        client.setCtrl(self);
+						client.doSendSignal("login", userName, password);
                     }
-                } catch (IOException e1) {
+                } catch (Exception e1) {
                     e1.printStackTrace();
                 }
             }
         });
     }
+    
 	
     public String getUserName() {
         String userName = textField.getText();
@@ -141,7 +121,36 @@ public class SignInControler {
 		return resultTND;
 	}
 
+	public void doCallback(ThreadClient thClient) {
+		String currentResult 	= thClient.getResult();
+        String tND 				= thClient.getResultTND();
+        setResultTND(tND);
+        System.out.print("moi:"+currentResult + " " + tND);
 
+        if ("ok user".equals(currentResult)) {
+            JOptionPane.showMessageDialog(null, "Bạn đã đăng nhập thành công");
+            signIn.dispose();
+            MainPage mp = new MainPage(client);
+            mp.setVisible(true);
+        }else if ("ok admin".equals(currentResult)) {
+            JOptionPane.showMessageDialog(null, "Bạn đã đăng nhập thành công");
+            signIn.dispose();
+            StartServer ss = new StartServer();
+            ss.setVisible(true);
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "User hoặc password sai!");
+        }
+	}
+	
+	private Client client;
+	public void doSetClient(Client client) {
+		this.client = client;
+	}
+	
+	public Client getClient() {
+		return client;
+	}
 }
 
 		

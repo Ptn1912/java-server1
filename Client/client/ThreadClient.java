@@ -2,101 +2,94 @@ package client;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.Socket;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-
-import controller.SignInControler;
-import controller.SignUpController;
-import view.SignIn;
+import controller.Controller;
 
 
 public class ThreadClient extends Thread {
-    private Socket socket;
-    private String userName, password;
-    private String email, tdn, tnd, mk, mkagain;
-    private String signal;
-    private String signalRoom;
-    private String result, resultTND, resultRoom;
-    
-    public ThreadClient(Socket socket, String userName, String password, String signal) {
-        this.socket = socket;
-        this.userName = userName;
-        this.password = password;
-        this.signal = signal;
-    }
+	private Socket socket;
+	private Controller ctrl;
+	private String result, resultTND, resultRoom;
 
-    public ThreadClient(Socket socket, String email, String tdn, String tnd, String mk, String mkagain, String signal) {
-        this.socket = socket;
-        this.email = email;
-        this.tdn = tdn;
-        this.tnd = tnd;
-        this.mk = mk;
-        this.mkagain = mkagain;
-        this.signal = signal;
-    }
-    
-    public ThreadClient(Socket socket, String signalRoom) {
-    	this.socket = socket;
-    	this.signalRoom = signalRoom;
-    }
-    
+	private DataInputStream dip;
+	private DataOutputStream dop;
+	public ThreadClient(Socket socket) {
+		this.socket = socket;
+		try {
+			dip = new DataInputStream(socket.getInputStream());
+			dop = new DataOutputStream(socket.getOutputStream());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	public void setCtrl (Controller ctrl) {
+		this.ctrl = ctrl;
+	}
+
 	@Override
-    public void run() {
-        try {
-            DataInputStream dip = new DataInputStream(socket.getInputStream());
-            DataOutputStream dop = new DataOutputStream(socket.getOutputStream());
-            
-            while(true) {
-            	if(signal != null) {
-                	dop.writeUTF(signal);
-                	System.out.println(signal);
-                    if(signal .equals("login")) {
-                    	dop.writeUTF(userName);
-                        dop.writeUTF(password);
-                    }else if(signal.equals("register")) {
-                    	dop.writeUTF(email);
-                    	dop.writeUTF(tdn);
-                    	dop.writeUTF(tnd);
-                    	dop.writeUTF(mk);
-                    	dop.writeUTF(mkagain);
-                    }
-                    
-                    result = dip.readUTF();
-                    resultTND = dip.readUTF();
-                   
-                }
-                
-                if(signalRoom != null) {
-                	dop.writeUTF(signalRoom);
-                	resultRoom = dip.readUTF();
-                	System.out.println(resultRoom);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+	public void run() {
+		try {
+			while(!socket.isClosed()) {
+				String receivedSignal = dip.readUTF();
+				if(receivedSignal.equals("svLogin") ) {
+					doSvLogin();
 
-    public String getResult() {
-        return result;
-    }
-    
-    public String getResultRoom() {
-    	return resultRoom;
-    }
-    
-    public void setResultTND(String resultTND) {
-    	this.resultTND = resultTND;
-    }
-    
-    public String getResultTND() {
-        return resultTND;
-    }
-    
+				}else if (receivedSignal.equals("svRegister")) {
+					doSvRegister();
+
+				}else if(receivedSignal.equals("svRoom")) {
+					doSvRoom ();
+
+				}else if(receivedSignal.equals("svError")){
+					//
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public String getResult() {
+		return result;
+	}
+
+	public String getResultRoom() {
+		return resultRoom;
+	}
+
+	public void setResultTND(String resultTND) {
+		this.resultTND = resultTND;
+	}
+
+	public String getResultTND() {
+		return resultTND;
+	}
+
+	public void doSendSignal (String signal, String ... content) throws Exception{
+		dop.writeUTF(signal);
+
+		for (String s:content) {
+			dop.writeUTF(s);
+		}
+	}
+
+	public void doSvLogin() throws Exception{
+		result 		= dip.readUTF();
+		resultTND 	= dip.readUTF();
+		ctrl.doCallback(this);
+	}
+	public void doSvRegister() throws Exception{
+		result 		= dip.readUTF();
+		resultTND 	= dip.readUTF();
+		ctrl.doCallback(this);
+	}
+	public void doSvRoom() throws Exception{
+		resultRoom 	= dip.readUTF();
+		ctrl.doCallback(this);
+	}
+
 }
 
