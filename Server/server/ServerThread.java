@@ -88,7 +88,6 @@ public class ServerThread extends Thread {
 	
 	private void doRegister() throws Exception{
 		String check = "";
-		String tnd = "";
 		this.email = dip.readUTF();
 		this.tdn = dip.readUTF();
 		this.tnd = dip.readUTF();

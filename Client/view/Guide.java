@@ -11,6 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+
+import client.Client;
+
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -24,7 +27,7 @@ import javax.swing.JButton;
 public class Guide extends JFrame {
 
 	private JPanel contentPane;
-	
+	private Client client;
 	public Guide() {
 		setVisible(true);
 		setTitle("Hướng dẫn");
@@ -63,7 +66,7 @@ public class Guide extends JFrame {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				MainPage jframeMainPage = new MainPage();
+				MainPage jframeMainPage = new MainPage(client);
 				SwingUtilities.getWindowAncestor(btnHome).dispose();
 				
 			}

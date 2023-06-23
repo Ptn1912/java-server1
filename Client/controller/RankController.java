@@ -40,7 +40,7 @@ public class RankController implements Controller{
 
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent e) {
-				MainPage jframeMainPage = new MainPage();
+				MainPage jframeMainPage = new MainPage(client);
 				rank.dispose();
 			}
 		});

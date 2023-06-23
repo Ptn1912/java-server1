@@ -8,7 +8,7 @@ package Utility;
 import Board.Board;
 
 import Board.Tile;
-import piece.Coordinate;
+import piece.*;
 import Move.Move;
 import piece.PieceTypes;
 import piece.Team;

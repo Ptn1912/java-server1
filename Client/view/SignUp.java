@@ -12,6 +12,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import client.Client;
+
 import javax.swing.JButton;
 import controller.*;
 import java.awt.event.ActionListener;
@@ -24,10 +27,13 @@ public class SignUp extends JFrame {
 	private JTextField textField_1, textField_2, textField_3;
 	private JPasswordField passwordField_1,passwordField_2;
 	private JButton btnAccountSurvivaled, btnConfirm;
+	private Client client;
 
-	public SignUp() {
+	public SignUp(Client client){
+		this.client = client;
 		init();
         SignUpController control = new SignUpController(btnAccountSurvivaled, btnConfirm, this, textField_1,textField_2, textField_3,passwordField_1,passwordField_2);
+        control.doSetClient(client);
         control.setEvent();
 	}
 	

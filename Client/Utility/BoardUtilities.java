@@ -32,7 +32,7 @@ public class BoardUtilities {
 
     public static ImageIcon getImageOfTeamPiece(Team team, PieceTypes pieceType) {
 
-        String imagePath = "D:\\Eclispe\\socket\\src\\chess_game\\Img\\";
+        String imagePath = "C:\\Users\\Msi\\OneDrive\\Pictures\\java-server1\\Client\\images\\";
         if (team == null || pieceType == null) {
             imagePath += "transparent.png";
         } else {

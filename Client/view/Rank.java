@@ -5,6 +5,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import client.Client;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
@@ -35,7 +38,7 @@ public class Rank extends JFrame {
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private int selectedRow = -1;
-	
+	private Client client;
 	public Rank() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,7 +65,7 @@ public class Rank extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				MainPage mp=new MainPage();
+				MainPage mp=new MainPage(client);
 				mp.setVisible(true);
 			}
 		});

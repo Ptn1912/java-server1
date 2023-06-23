@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import client.Client;
+import client.*;
 
 import javax.swing.UIManager;
 import java.awt.Color;
@@ -27,8 +27,7 @@ public class WaitRoom extends JFrame {
 	public WaitRoom(Client client) {
 		this.client=client;
 		init();
-		WaitRoomController control = new WaitRoomController(btnHome, this, panel_room1, panel_room2, panel_room3, 
-															panel_room4, panel_room5, panel_room6, panel_room7, panel_room8);
+		WaitRoomController control = new WaitRoomController(btnHome, this, panel_room1, panel_room2, panel_room3, panel_room4, panel_room5, panel_room6, panel_room7, panel_room8);
 		control.doSetClient(client);
 		control.setEvent();
 	}
@@ -255,4 +254,5 @@ public class WaitRoom extends JFrame {
 		contentPane.add(btnHome);
 	}
 
+	
 }

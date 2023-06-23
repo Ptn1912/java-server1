@@ -5,7 +5,7 @@
  */
 package view;
 
-import ClientSide.Client;
+import client.*;
 
 import Board.Board;
 import piece.Coordinate;

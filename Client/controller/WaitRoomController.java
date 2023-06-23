@@ -11,8 +11,9 @@ import javax.swing.JPanel;
 
 import client.Client;
 import client.ThreadClient;
+import piece.Team;
 import view.ModePlay;
-
+import view.*;
 public class WaitRoomController implements Controller{
 	private JFrame waitRoom;
 	private JButton btnHome;
@@ -32,6 +33,7 @@ public class WaitRoomController implements Controller{
 		this.panel_room8 = panel_room8;
 	}
 	
+
 	public void setEvent() {
 		btnHome.addMouseListener(new MouseAdapter() {			
 			@Override
@@ -75,6 +77,8 @@ public class WaitRoomController implements Controller{
 				try {
 					client.setCtrl(self);
                     client.doSendSignal("1");
+                    client.setTeam(Team.BLACK); // Gán màu đen cho client
+
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
@@ -85,8 +89,12 @@ public class WaitRoomController implements Controller{
          String resultRoom = thClient.getResultRoom();
          String tND = thClient.getResultTND();
          if(resultRoom.equals("success")) {
-        	 
          	JOptionPane.showMessageDialog(null, "bạn đã tham gia phòng 1 /n Xin chào " + tND);
+         
+         	Client client1 = new Client();
+            client1.setTeam(Team.WHITE); // Gán màu trắng cho client1
+            GamePanel game1 = new GamePanel(client1);
+            waitRoom.dispose();
          }else {
          	JOptionPane.showMessageDialog(null, "Xin lỗi \n Phòng hiện tại đã đầy");
          }

@@ -59,7 +59,7 @@ public class SignInControler implements Controller{
 
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                SignUp jframeSignUp = new SignUp();
+                SignUp jframeSignUp = new SignUp(client);
                 signIn.dispose();
             }
         });

@@ -5,7 +5,7 @@
  */
 package view;
 
-import ClientSide.Client;
+import client.*;
 
 
 import Messages.Message;
@@ -72,11 +72,7 @@ public class TilePanel extends JPanel {
                         if (move.hasKilledPiece()) {
                             client.game.getBottomGameMenu().killedPiecesListModel.addElement(move.getKilledPiece().toString());
                         }
-                        //the time when we send move class directly we using this code.
-//                        Message movementMessage = new Message(Message.MessageTypes.MOVE);
-//                        movementMessage.content = (Object) (move);
-//                        client.Send(movementMessage);
-                        //instead of send move classs directly we just send the coordinates of the tiles (current,destination) in  MovementMessage object
+                       
                         Message msg = new Message(Message.MessageTypes.MOVE);
                         MovementMessage movement = new MovementMessage();
                         movement.currentCoordinate = move.getCurrentTile().getCoordinate();
