@@ -5,8 +5,7 @@
  */
 package view;
 
-import client.*;
-
+import client.*; 
 
 import Messages.Message;
 import Messages.MovementMessage;
@@ -22,6 +21,8 @@ import resources.BOARD_Configurations;
 import resources.GUI_Configurations;
 import Utility.BoardUtilities;
 import Utility.MoveUtilities;
+import client.Client;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;

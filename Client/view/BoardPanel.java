@@ -5,9 +5,9 @@
  */
 package view;
 
-import client.*;
-
+import client.*; 
 import Board.Board;
+import client.Client;
 import piece.Coordinate;
 import java.awt.Graphics;
 import javax.swing.JPanel;

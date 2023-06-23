@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import client.Client;
 import client.ThreadClient;
 import piece.Team;
+import view.GamePanel;
 import view.ModePlay;
 import view.*;
 public class WaitRoomController implements Controller{
@@ -89,6 +90,7 @@ public class WaitRoomController implements Controller{
          String resultRoom = thClient.getResultRoom();
          String tND = thClient.getResultTND();
          if(resultRoom.equals("success")) {
+        	GamePanel gamePanel = new GamePanel(client);
          	JOptionPane.showMessageDialog(null, "bạn đã tham gia phòng 1 /n Xin chào " + tND);
          
          	Client client1 = new Client();
