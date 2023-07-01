@@ -22,6 +22,7 @@ public class ServerThread extends Thread {
     private String email, tdn, tnd, mk, mkagain;
     
     private String signalRoom;
+    private String colorPlayer;
     private List<WaitRoomModel> waitRooms;
     private WaitRoomModel currentWaitRoom;
     private int clientNumber;
@@ -113,9 +114,22 @@ public class ServerThread extends Thread {
 				currentWaitRoom = null;
 			}else {
 				waitRoom.addClient(this);
+				String check = waitRoom.checkColor();
+				if(check.equals("white")) {
+					boolean white = false;
+					boolean black = waitRoom.getBlack();
+					waitRoom.setColor(white, black);
+					colorPlayer = "white";
+				}else {
+					boolean white = waitRoom.getWhite();
+					boolean black = false;
+					waitRoom.setColor(white, black);
+					colorPlayer = "black";
+				}
 				currentWaitRoom = waitRoom;
 				dop.writeUTF("svRoom");
 				dop.writeUTF("success");
+				dop.writeUTF(colorPlayer);
 				System.out.println("chao mung tham gia phong" + idRoom);
 			}
 		}

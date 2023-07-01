@@ -78,7 +78,6 @@ public class WaitRoomController implements Controller{
 				try {
 					client.setCtrl(self);
                     client.doSendSignal("1");
-                    client.setTeam(Team.BLACK); // Gán màu đen cho client
 
 				} catch (Exception e2) {
 					e2.printStackTrace();
@@ -88,14 +87,20 @@ public class WaitRoomController implements Controller{
 	}
 	public void doCallback(ThreadClient thClient) {
          String resultRoom = thClient.getResultRoom();
+         String colorPlayer = thClient.getColorPlayer();
          String tND = thClient.getResultTND();
          if(resultRoom.equals("success")) {
+        	if(colorPlayer.equals("white")) {
+        		client.setTeam(Team.WHITE);
+        	}else {
+        		client.setTeam(Team.BLACK);
+        	}
         	GamePanel gamePanel = new GamePanel(client);
-         	JOptionPane.showMessageDialog(null, "bạn đã tham gia phòng 1 /n Xin chào " + tND);
+         	JOptionPane.showMessageDialog(null, "bạn đã tham gia phòng 1 /n Xin chào " + tND + colorPlayer);
          
-         	Client client1 = new Client();
-            client1.setTeam(Team.WHITE); // Gán màu trắng cho client1
-            GamePanel game1 = new GamePanel(client1);
+//         	Client client1 = new Client();
+//            client1.setTeam(Team.WHITE); // Gán màu trắng cho client1
+//            GamePanel game1 = new GamePanel(client1);
             waitRoom.dispose();
          }else {
          	JOptionPane.showMessageDialog(null, "Xin lỗi \n Phòng hiện tại đã đầy");

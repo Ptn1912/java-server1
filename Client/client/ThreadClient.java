@@ -10,7 +10,7 @@ import controller.Controller;
 public class ThreadClient extends Thread {
 	private Socket socket;
 	private Controller ctrl;
-	private String result, resultTND, resultRoom;
+	private String result, resultTND, resultRoom, colorPlayer;
 
 	private DataInputStream dip;
 	private DataOutputStream dop;
@@ -59,6 +59,10 @@ public class ThreadClient extends Thread {
 	public String getResultRoom() {
 		return resultRoom;
 	}
+	
+	public String getColorPlayer() {
+		return colorPlayer;
+	}
 
 	public void setResultTND(String resultTND) {
 		this.resultTND = resultTND;
@@ -88,6 +92,7 @@ public class ThreadClient extends Thread {
 	}
 	public void doSvRoom() throws Exception{
 		resultRoom 	= dip.readUTF();
+		colorPlayer = dip.readUTF();
 		ctrl.doCallback(this);
 	}
 
