@@ -10,9 +10,12 @@ import client.*;
 import javax.swing.UIManager;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+
 import javax.swing.JButton;
 import controller.*;
 
@@ -24,10 +27,33 @@ public class WaitRoom extends JFrame {
 	jlb_Room7_Icon2, jlb_Room7_Icon1, jlb_text7, jlb_Room8_Icon2, jlb_Room8_Icon1, jlb_text8, jlb_Title;
 	private JButton btnHome;
 	private Client client;
-	public WaitRoom(Client client) {
-		this.client=client;
+	private String countPlayer;
+	
+	public WaitRoom(Client client, String countPlayer) {
+		this.client = client;
+		this.countPlayer = countPlayer;
+		String[] countRooms = countPlayer.split(" ");
 		init();
-		WaitRoomController control = new WaitRoomController(btnHome, this, panel_room1, panel_room2, panel_room3, panel_room4, panel_room5, panel_room6, panel_room7, panel_room8);
+		JPanel[] panelRooms = { panel_room1, panel_room2, panel_room3, panel_room4, panel_room5, panel_room6, panel_room7, panel_room8 };
+		JLabel[] labelTexts = { jlb_text1, jlb_text2, jlb_text3, jlb_text4, jlb_text5, jlb_text6, jlb_text7, jlb_text8};
+		for (int count = 0; count < 8; ++count) {
+		    final int finalCount = count;
+		    if (finalCount < panelRooms.length) {
+		    	if (countRooms[finalCount+1].equals("2")) {
+		            panelRooms[count].setBackground(Color.RED);
+		            labelTexts[count].setText("Phòng đầy");
+		            labelTexts[count].setForeground(Color.white);
+		        } else if (countRooms[finalCount+1].equals("1")) {
+		            panelRooms[count].setBackground(Color.YELLOW);
+		            labelTexts[count].setText("Đang chờ...");
+		            labelTexts[count].setForeground(Color.orange);
+		        } else {
+		            panelRooms[count].setBackground(Color.WHITE);
+		        }
+		    }
+		}
+		
+		WaitRoomController control = new WaitRoomController(btnHome, this, panelRooms, countRooms);
 		control.doSetClient(client);
 		control.setEvent();
 	}

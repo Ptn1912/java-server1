@@ -2,6 +2,7 @@ package client;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 import controller.Controller;
@@ -10,7 +11,7 @@ import controller.Controller;
 public class ThreadClient extends Thread {
 	private Socket socket;
 	private Controller ctrl;
-	private String result, resultTND, resultRoom, colorPlayer;
+	private String result, resultTND, resultRoom, colorPlayer, signalRoom, countPlayer;
 
 	private DataInputStream dip;
 	private DataOutputStream dop;
@@ -41,8 +42,11 @@ public class ThreadClient extends Thread {
 					doSvRegister();
 
 				}else if(receivedSignal.equals("svRoom")) {
-					doSvRoom ();
+					doSvRoom();
 
+				}else if(receivedSignal.equals("svCount")){
+					dogetCount();
+					
 				}else if(receivedSignal.equals("svError")){
 					//
 				}
@@ -72,9 +76,19 @@ public class ThreadClient extends Thread {
 		return resultTND;
 	}
 
+	public String getSignalRoom() {
+		return signalRoom;
+	}
+	
+	public String getCountPlayer() {
+		return countPlayer;
+	}
+	
 	public void doSendSignal (String signal, String ... content) throws Exception{
 		dop.writeUTF(signal);
-
+		if(signal.matches("[1-8]")) {
+			this.signalRoom = signal;
+		}
 		for (String s:content) {
 			dop.writeUTF(s);
 		}
@@ -95,6 +109,10 @@ public class ThreadClient extends Thread {
 		colorPlayer = dip.readUTF();
 		ctrl.doCallback(this);
 	}
-
+	
+	public void dogetCount() throws IOException{
+		countPlayer = dip.readUTF();
+		ctrl.doCallback(this);
+	}
 }
 

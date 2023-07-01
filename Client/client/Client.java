@@ -63,6 +63,15 @@ public class Client {
     public String getResultTND() {
         return threadClient.getResultTND();
     }
+    
+    public String getSignalRoom() {
+    	return threadClient.getSignalRoom();
+    }
+    
+    public String getCountPlayer() {
+    	return threadClient.getCountPlayer();
+    }
+    
     public Team getTeam() {
         return team;
     }

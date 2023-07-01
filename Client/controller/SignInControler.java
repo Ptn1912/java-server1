@@ -9,12 +9,14 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import client.Client;
 import client.ThreadClient;
 import view.MainPage;
 import view.SignUp;
 import view.StartServer;
+import view.WaitRoom;
 
 public class SignInControler implements Controller{
 	
@@ -130,8 +132,13 @@ public class SignInControler implements Controller{
         if ("ok user".equals(currentResult)) {
             JOptionPane.showMessageDialog(null, "Bạn đã đăng nhập thành công");
             signIn.dispose();
-            MainPage mp = new MainPage(client);
-            mp.setVisible(true);
+            SwingUtilities.invokeLater(new Runnable() {
+    	        @Override
+    	        public void run() {
+    	        	MainPage mp = new MainPage(client);
+    	            mp.setVisible(true);
+    	        }
+    	    });
         }else if ("ok admin".equals(currentResult)) {
             JOptionPane.showMessageDialog(null, "Bạn đã đăng nhập thành công");
             signIn.dispose();

@@ -11,6 +11,8 @@ import piece.Team;
 import resources.GUI_Configurations;
 import view.*;
 import client.Client;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 public class GamePanel {
 	 private JFrame gameFrame;
@@ -18,11 +20,13 @@ public class GamePanel {
 	 private Board chessBoard;
 	 private InGameBottomMenu bottomGameMenu;
 	 private Client client;
+	 private String colorPlayer;
 	
-	 public GamePanel(Client client){
+	 public GamePanel(Client client, String colorPlayer){
 		 this.client = client;
+		 this.colorPlayer = colorPlayer;
 		 this.gameFrame = new JFrame("Chess");
-	     this.gameFrame.setLayout(new BorderLayout());
+	     this.gameFrame.getContentPane().setLayout(new BorderLayout());
 	     this.gameFrame.setSize(GUI_Configurations.OUTER_FRAME_DIMENSION);
 	     createGamePanel();
 	     this.gameFrame.setVisible(true);
@@ -32,7 +36,7 @@ public class GamePanel {
 	private void createGamePanel() {
 		 this.chessBoard = new Board();
 	     this.boardPanel = new BoardPanel(this.chessBoard, this.client);
-	     this.bottomGameMenu = new InGameBottomMenu();
+	     this.bottomGameMenu = new InGameBottomMenu(client, gameFrame, colorPlayer);
 	     this.bottomGameMenu.getPlayersColorLBL().setText("Your color is " + this.client.getTeam().toString());
 	     if(this.client.getTeam() == Team.WHITE)
 	     {
@@ -44,9 +48,9 @@ public class GamePanel {
 	         this.bottomGameMenu.getTurnLBL().setText("Enemy Turn");
 	         this.bottomGameMenu.getTurnLBL().setForeground(Color.RED);
 	     }    
-         this.gameFrame.add(boardPanel);
-	     this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
-	     this.gameFrame.add(this.bottomGameMenu, BorderLayout.PAGE_END);
+         this.gameFrame.getContentPane().add(boardPanel);
+	     this.gameFrame.getContentPane().add(this.boardPanel, BorderLayout.CENTER);
+	     this.gameFrame.getContentPane().add(this.bottomGameMenu, BorderLayout.PAGE_END);
 
 	     this.gameFrame.setVisible(true);
 		

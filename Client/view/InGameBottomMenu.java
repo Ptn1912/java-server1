@@ -7,20 +7,39 @@ package view;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
+import javax.swing.LayoutStyle.ComponentPlacement;
+
+import client.Client;
+import model.WaitRoomModel;
+
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
 /**
  *
  * @author Enes Kızılcın <nazifenes.kizilcin@stu.fsm.edu.tr>
  */
 public class InGameBottomMenu extends javax.swing.JPanel {
-
+	private Client client;
+	private JFrame gamePanel;
+	private String colorPlayer;
+	private List<WaitRoomModel> waitRooms;
     /**
      * Creates new form NewJPanel
      */
     public DefaultListModel killedPiecesListModel;
-    public InGameBottomMenu() {
+    public InGameBottomMenu(Client client, JFrame gamePanel, String colorPlayer) {
+    	this.gamePanel = gamePanel;
+    	this.client = client;
+    	this.colorPlayer = colorPlayer;
         initComponents();
         killedPiecesListModel = new DefaultListModel();
         killedPiecesLIST.setModel(killedPiecesListModel);
@@ -44,6 +63,7 @@ public class InGameBottomMenu extends javax.swing.JPanel {
     public void setTurnLBL(JLabel turnLBL) {
         this.turnLBL = turnLBL;
     }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -72,37 +92,65 @@ public class InGameBottomMenu extends javax.swing.JPanel {
         jLabel2.setBackground(new java.awt.Color(0, 153, 102));
         jLabel2.setForeground(new java.awt.Color(0, 255, 153));
         jLabel2.setText("Killed Pieces");
+        
+        JButton btnThoatPhong = new JButton("Thoát Phòng");
+        btnThoatPhong.setFont(new Font("Cambria Math", Font.PLAIN, 20));
+        btnThoatPhong.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String countPlayer = client.getCountPlayer();
+				String idRoom = client.getSignalRoom().concat(" l");
+                try {
+					client.doSendSignal(idRoom, colorPlayer);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+                WaitRoom waitRoom = new WaitRoom(client, countPlayer);
+				gamePanel.dispose();
+			}
+		});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(playersColorLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(99, 99, 99)
-                .addComponent(turnLBL)
-                .addContainerGap(80, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(94, 94, 94)
-                .addComponent(jLabel2)
-                .addGap(0, 0, Short.MAX_VALUE))
+        	layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(layout.createSequentialGroup()
+        			.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+        				.addGroup(Alignment.LEADING, layout.createSequentialGroup()
+        					.addGap(23)
+        					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(playersColorLBL, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE))
+        					.addGap(99)
+        					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(btnThoatPhong, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        						.addComponent(turnLBL)))
+        				.addGroup(Alignment.LEADING, layout.createSequentialGroup()
+        					.addGap(94)
+        					.addComponent(jLabel2)))
+        			.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(turnLBL)
-                    .addComponent(playersColorLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17))
+        	layout.createParallelGroup(Alignment.TRAILING)
+        		.addGroup(layout.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(turnLBL)
+        				.addComponent(playersColorLBL, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
+        			.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        				.addGroup(layout.createSequentialGroup()
+        					.addGap(18)
+        					.addComponent(jLabel2)
+        					.addPreferredGap(ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
+        					.addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
+        					.addGap(17))
+        				.addGroup(Alignment.TRAILING, layout.createSequentialGroup()
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addComponent(btnThoatPhong, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
+        					.addGap(35))))
         );
+        this.setLayout(layout);
     }// </editor-fold>//GEN-END:initComponents
 
 
@@ -112,5 +160,4 @@ public class InGameBottomMenu extends javax.swing.JPanel {
     private javax.swing.JList<String> killedPiecesLIST;
     private javax.swing.JLabel playersColorLBL;
     private javax.swing.JLabel turnLBL;
-    // End of variables declaration//GEN-END:variables
 }

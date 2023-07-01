@@ -55,7 +55,15 @@ public class ServerThread extends Thread {
                 	
                 }else if(receivedSignal.matches("[1-8]")) {
                 	doJoinRoom (receivedSignal);
-                
+                	
+                }else if(receivedSignal.matches("[1-8] l")) {
+                	String[] idRooms = receivedSignal.split(" ");
+                	doLeaveRoom(idRooms[0]);
+                	
+                }else if(receivedSignal.equals("getCount")) {
+                	dop.writeUTF("svCount");;
+                	dop.writeUTF(getCountPlayer());
+                	
                 }else {
                 	dop.writeUTF("svError");
                 }
@@ -138,6 +146,39 @@ public class ServerThread extends Thread {
 			this.signalRoom = "JOIN " + numberRoom;
     		currentWaitRoom.broadcastMessage(this, signalRoom);
         }
+	}
+	
+	private void doLeaveRoom(String numberRoom) throws Exception{
+		this.colorPlayer = dip.readUTF();
+		int idRoom = Integer.parseInt(numberRoom);
+		WaitRoomModel waitRoom = waitRooms.get(idRoom - 1);
+		synchronized (waitRoom) {
+			if(colorPlayer.equals("white")) {
+				boolean white = true;
+				boolean black = waitRoom.getBlack();
+				waitRoom.setColor(white, black);
+			}else {
+				boolean white = waitRoom.getWhite();
+				boolean black = true;
+				waitRoom.setColor(white, black);
+			}
+			waitRoom.removerClient(this);
+			System.out.println("da thoat khoi phong " + idRoom);
+		}
+		
+		if (currentWaitRoom != null) {
+			this.signalRoom = "JOIN " + numberRoom;
+    		currentWaitRoom.broadcastMessage(this, signalRoom);
+        }
+	}
+	
+	public String getCountPlayer() {
+		String result="";
+		for(WaitRoomModel room : waitRooms) {
+			String count = String.valueOf(room.getClientCount());
+			result = result.concat(" ").concat(count);
+		}
+		return result;
 	}
 	
 	public int getPort() {

@@ -18,20 +18,14 @@ import view.*;
 public class WaitRoomController implements Controller{
 	private JFrame waitRoom;
 	private JButton btnHome;
-	private JPanel panel_room1, panel_room2, panel_room3, panel_room4, panel_room5, panel_room6, panel_room7, panel_room8;
+	private JPanel[] panelRooms;
+	private String[] countRooms;
 	private WaitRoomController self = this;
-	public WaitRoomController(JButton btnHome, JFrame waitRoom, JPanel panel_room1, JPanel panel_room2, JPanel panel_room3, JPanel panel_room4,
-			 				  JPanel panel_room5, JPanel panel_room6, JPanel panel_room7, JPanel panel_room8) {
+	public WaitRoomController(JButton btnHome, JFrame waitRoom, JPanel[] panelRooms, String[] countRooms) {
 		this.btnHome = btnHome;
 		this.waitRoom = waitRoom;
-		this.panel_room1 = panel_room1;
-		this.panel_room2 = panel_room2;
-		this.panel_room3 = panel_room3;
-		this.panel_room4 = panel_room4;
-		this.panel_room5 = panel_room5;
-		this.panel_room6 = panel_room6;
-		this.panel_room7 = panel_room7;
-		this.panel_room8 = panel_room8;
+		this.panelRooms = panelRooms;
+		this.countRooms = countRooms;
 	}
 	
 
@@ -58,32 +52,264 @@ public class WaitRoomController implements Controller{
 			}
 		});
 		
-		panel_room1.addMouseListener(new MouseAdapter() {			
-			@Override
-			public void mouseExited(java.awt.event.MouseEvent e) {
-				panel_room1.setBackground(new Color(255, 255, 255));
-				panel_room1.setForeground(new Color(0, 0, 0));
-				
-			}
-			
-			@Override
-			public void mouseEntered(java.awt.event.MouseEvent e) {
-				panel_room1.setBackground(new Color(0, 153 , 0));
-				panel_room1.setForeground(new Color(255, 255, 255));
-				
-			}
-			
-			@Override
-			public void mouseClicked(java.awt.event.MouseEvent e) {
-				try {
-					client.setCtrl(self);
-                    client.doSendSignal("1");
+		for (int count = 0; count < 8; ++count) {
+		    final int finalCount = count;
+		    if (finalCount < panelRooms.length) {
+		        panelRooms[finalCount].addMouseListener(new MouseAdapter() {
 
-				} catch (Exception e2) {
-					e2.printStackTrace();
-				}
-			}
-		});
+		            @Override
+		            public void mouseExited(java.awt.event.MouseEvent e) {
+		                if (countRooms[finalCount+1].equals("2")) {
+		                    panelRooms[finalCount].setBackground(Color.RED);
+		                } else if (countRooms[finalCount+1].equals("1")) {
+		                    panelRooms[finalCount].setBackground(Color.YELLOW);
+		                } else {
+		                    panelRooms[finalCount].setBackground(Color.WHITE);
+		                }
+		                panelRooms[finalCount].setForeground(new Color(0, 0, 0));
+		            }
+
+		            @Override
+		            public void mouseEntered(java.awt.event.MouseEvent e) {
+		                if (countRooms[finalCount+1].equals("2")) {
+		                    panelRooms[finalCount].setBackground(Color.RED);
+		                    panelRooms[finalCount].setForeground(new Color(0, 0, 0));
+		                } else {
+		                    panelRooms[finalCount].setBackground(new Color(0, 153, 0));
+		                    panelRooms[finalCount].setForeground(new Color(255, 255, 255));
+		                }
+		            }
+
+		            @Override
+		            public void mouseClicked(java.awt.event.MouseEvent e) {
+		                try {
+		                    client.setCtrl(self);
+		                    client.doSendSignal(String.valueOf(finalCount + 1));
+		                } catch (Exception e2) {
+		                    e2.printStackTrace();
+		                }
+		            }
+		        });
+		    }
+		}
+
+
+
+//		panelRooms[0].addMouseListener(new MouseAdapter() {			
+//			@Override
+//			public void mouseExited(java.awt.event.MouseEvent e) {
+//				panelRooms[0].setBackground(new Color(255, 255, 255));
+//				panelRooms[0].setForeground(new Color(0, 0, 0));
+//				
+//			}
+//			
+//			@Override
+//			public void mouseEntered(java.awt.event.MouseEvent e) {
+//				panelRooms[0].setBackground(new Color(0, 153 , 0));
+//				panelRooms[0].setForeground(new Color(255, 255, 255));
+//				
+//			}
+//			
+//			@Override
+//			public void mouseClicked(java.awt.event.MouseEvent e) {
+//				try {
+//					client.setCtrl(self);
+//                    client.doSendSignal("1");
+//
+//				} catch (Exception e2) {
+//					e2.printStackTrace();
+//				}
+//			}
+//		});
+//		
+//		panelRooms[1].addMouseListener(new MouseAdapter() {			
+//			@Override
+//			public void mouseExited(java.awt.event.MouseEvent e) {
+//				panelRooms[1].setBackground(new Color(255, 255, 255));
+//				panelRooms[1].setForeground(new Color(0, 0, 0));
+//				
+//			}
+//			
+//			@Override
+//			public void mouseEntered(java.awt.event.MouseEvent e) {
+//				panelRooms[1].setBackground(new Color(0, 153 , 0));
+//				panelRooms[1].setForeground(new Color(255, 255, 255));
+//				
+//			}
+//			
+//			@Override
+//			public void mouseClicked(java.awt.event.MouseEvent e) {
+//				try {
+//					client.setCtrl(self);
+//                    client.doSendSignal("2");
+//
+//				} catch (Exception e2) {
+//					e2.printStackTrace();
+//				}
+//			}
+//		});
+//		
+//		panelRooms[2].addMouseListener(new MouseAdapter() {			
+//			@Override
+//			public void mouseExited(java.awt.event.MouseEvent e) {
+//				panelRooms[2].setBackground(new Color(255, 255, 255));
+//				panelRooms[2].setForeground(new Color(0, 0, 0));
+//				
+//			}
+//			
+//			@Override
+//			public void mouseEntered(java.awt.event.MouseEvent e) {
+//				panelRooms[2].setBackground(new Color(0, 153 , 0));
+//				panelRooms[2].setForeground(new Color(255, 255, 255));
+//				
+//			}
+//			
+//			@Override
+//			public void mouseClicked(java.awt.event.MouseEvent e) {
+//				try {
+//					client.setCtrl(self);
+//                    client.doSendSignal("3");
+//
+//				} catch (Exception e2) {
+//					e2.printStackTrace();
+//				}
+//			}
+//		});
+//		
+//		panelRooms[3].addMouseListener(new MouseAdapter() {			
+//			@Override
+//			public void mouseExited(java.awt.event.MouseEvent e) {
+//				panelRooms[3].setBackground(new Color(255, 255, 255));
+//				panelRooms[3].setForeground(new Color(0, 0, 0));
+//				
+//			}
+//			
+//			@Override
+//			public void mouseEntered(java.awt.event.MouseEvent e) {
+//				panelRooms[3].setBackground(new Color(0, 153 , 0));
+//				panelRooms[3].setForeground(new Color(255, 255, 255));
+//				
+//			}
+//			
+//			@Override
+//			public void mouseClicked(java.awt.event.MouseEvent e) {
+//				try {
+//					client.setCtrl(self);
+//                    client.doSendSignal("4");
+//
+//				} catch (Exception e2) {
+//					e2.printStackTrace();
+//				}
+//			}
+//		});
+//		
+//		panelRooms[4].addMouseListener(new MouseAdapter() {			
+//			@Override
+//			public void mouseExited(java.awt.event.MouseEvent e) {
+//				panelRooms[4].setBackground(new Color(255, 255, 255));
+//				panelRooms[4].setForeground(new Color(0, 0, 0));
+//				
+//			}
+//			
+//			@Override
+//			public void mouseEntered(java.awt.event.MouseEvent e) {
+//				panelRooms[4].setBackground(new Color(0, 153 , 0));
+//				panelRooms[4].setForeground(new Color(255, 255, 255));
+//				
+//			}
+//			
+//			@Override
+//			public void mouseClicked(java.awt.event.MouseEvent e) {
+//				try {
+//					client.setCtrl(self);
+//                    client.doSendSignal("5");
+//
+//				} catch (Exception e2) {
+//					e2.printStackTrace();
+//				}
+//			}
+//		});
+//		
+//		panelRooms[5].addMouseListener(new MouseAdapter() {			
+//			@Override
+//			public void mouseExited(java.awt.event.MouseEvent e) {
+//				panelRooms[5].setBackground(new Color(255, 255, 255));
+//				panelRooms[5].setForeground(new Color(0, 0, 0));
+//				
+//			}
+//			
+//			@Override
+//			public void mouseEntered(java.awt.event.MouseEvent e) {
+//				panelRooms[5].setBackground(new Color(0, 153 , 0));
+//				panelRooms[5].setForeground(new Color(255, 255, 255));
+//				
+//			}
+//			
+//			@Override
+//			public void mouseClicked(java.awt.event.MouseEvent e) {
+//				try {
+//					client.setCtrl(self);
+//                    client.doSendSignal("6");
+//
+//				} catch (Exception e2) {
+//					e2.printStackTrace();
+//				}
+//			}
+//		});
+//		
+//		panelRooms[6].addMouseListener(new MouseAdapter() {			
+//			@Override
+//			public void mouseExited(java.awt.event.MouseEvent e) {
+//				panelRooms[6].setBackground(new Color(255, 255, 255));
+//				panelRooms[6].setForeground(new Color(0, 0, 0));
+//				
+//			}
+//			
+//			@Override
+//			public void mouseEntered(java.awt.event.MouseEvent e) {
+//				panelRooms[6].setBackground(new Color(0, 153 , 0));
+//				panelRooms[6].setForeground(new Color(255, 255, 255));
+//				
+//			}
+//			
+//			@Override
+//			public void mouseClicked(java.awt.event.MouseEvent e) {
+//				try {
+//					client.setCtrl(self);
+//                    client.doSendSignal("7");
+//
+//				} catch (Exception e2) {
+//					e2.printStackTrace();
+//				}
+//			}
+//		});
+//		
+//		panelRooms[7].addMouseListener(new MouseAdapter() {			
+//			@Override
+//			public void mouseExited(java.awt.event.MouseEvent e) {
+//				panelRooms[7].setBackground(new Color(255, 255, 255));
+//				panelRooms[7].setForeground(new Color(0, 0, 0));
+//				
+//			}
+//			
+//			@Override
+//			public void mouseEntered(java.awt.event.MouseEvent e) {
+//				panelRooms[7].setBackground(new Color(0, 153 , 0));
+//				panelRooms[7].setForeground(new Color(255, 255, 255));
+//				
+//			}
+//			
+//			@Override
+//			public void mouseClicked(java.awt.event.MouseEvent e) {
+//				try {
+//					client.setCtrl(self);
+//                    client.doSendSignal("8");
+//
+//				} catch (Exception e2) {
+//					e2.printStackTrace();
+//				}
+//			}
+//		});
 	}
 	public void doCallback(ThreadClient thClient) {
          String resultRoom = thClient.getResultRoom();
@@ -95,12 +321,9 @@ public class WaitRoomController implements Controller{
         	}else {
         		client.setTeam(Team.BLACK);
         	}
-        	GamePanel gamePanel = new GamePanel(client);
+        	GamePanel gamePanel = new GamePanel(client, colorPlayer);
          	JOptionPane.showMessageDialog(null, "bạn đã tham gia phòng 1 /n Xin chào " + tND + colorPlayer);
-         
-//         	Client client1 = new Client();
-//            client1.setTeam(Team.WHITE); // Gán màu trắng cho client1
-//            GamePanel game1 = new GamePanel(client1);
+
             waitRoom.dispose();
          }else {
          	JOptionPane.showMessageDialog(null, "Xin lỗi \n Phòng hiện tại đã đầy");

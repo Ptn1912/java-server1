@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import client.Client;
 import client.ThreadClient;
@@ -12,6 +14,7 @@ import view.*;
 public class ModePlayController implements Controller{
 	private JFrame modePlay;
 	private JButton bntComputer, btnPlayer, btnHome;
+	private ModePlayController self = this;
 	
 	public ModePlayController(JButton btnComputer, JButton btnPlayer, JButton btnHome, JFrame modePlay) {
 		this.bntComputer = btnComputer;
@@ -60,8 +63,13 @@ public class ModePlayController implements Controller{
 			
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent e) {
-				WaitRoom jframeWaitRoom = new WaitRoom(client);
-				modePlay.dispose();
+				try {
+					client.setCtrl(self);
+					client.doSendSignal("getCount");
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -88,8 +96,15 @@ public class ModePlayController implements Controller{
 		});
 	}
 	
-public void doCallback(ThreadClient thClient) {
-		
+	public void doCallback(ThreadClient thClient) {
+		String countPlayer = client.getCountPlayer();
+	    SwingUtilities.invokeLater(new Runnable() {
+	        @Override
+	        public void run() {
+	            WaitRoom jframeWaitRoom = new WaitRoom(client, countPlayer);
+	            modePlay.dispose();
+	        }
+	    });
 	}
 	
 	private Client client;
