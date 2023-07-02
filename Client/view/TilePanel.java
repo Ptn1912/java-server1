@@ -84,8 +84,7 @@ public class TilePanel extends JPanel {
                         msg.content = (Object) movement;
                         client.Send(msg);
                         chessBoard.changeCurrentPlayer();
-                        client.game.getBottomGameMenu().getTurnLBL().setText("Enemy Turn");
-                        client.game.getBottomGameMenu().getTurnLBL().setForeground(Color.RED);
+                        
 
                         if (move.hasKilledPiece()) {
                             if (move.getKilledPiece().getType() == PieceTypes.KING) {

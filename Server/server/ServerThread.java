@@ -17,10 +17,12 @@ import java.util.regex.Matcher;
 
 public class ServerThread extends Thread {
     private Socket socket;
-    
+
+	private boolean gameStarted = false;
     private String userName, password;
     private String email, tdn, tnd, mk, mkagain;
-    
+    private static int connectedClients = 0; // Thêm biến đếm số lượng client đã kết nối
+
     private String signalRoom;
     private String colorPlayer;
     private List<WaitRoomModel> waitRooms;
@@ -49,13 +51,15 @@ public class ServerThread extends Thread {
             	  
                 if(receivedSignal.equals("login") ) {
                 	doLogin();
-                
+                	
                 }else if (receivedSignal.equals("register")) {
                 	doRegister();
                 	
                 }else if(receivedSignal.matches("[1-8]")) {
                 	doJoinRoom (receivedSignal);
-                	
+                	 synchronized (waitRooms.get(Integer.parseInt(receivedSignal) - 1)) {
+                         waitRooms.get(Integer.parseInt(receivedSignal) - 1).notifyAll(); // Thông báo cho tất cả các thread đang chờ
+                     }
                 }else if(receivedSignal.matches("[1-8] l")) {
                 	String[] idRooms = receivedSignal.split(" ");
                 	doLeaveRoom(idRooms[0]);
@@ -72,6 +76,9 @@ public class ServerThread extends Thread {
             socket.close();
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            // Giảm giá trị của connectedClients sau khi một client đã ngắt kết nối
+            connectedClients--;
         }
     }
 	
@@ -90,8 +97,8 @@ public class ServerThread extends Thread {
 		System.out.println(check + " " + tnd);
 		
 		dop.writeUTF("svLogin");
-		dop.writeUTF(check);
-		dop.writeUTF(tnd);
+		 dop.writeUTF(check != null ? check : ""); // Kiểm tra giá trị của check trước khi ghi
+		    dop.writeUTF(tnd != null ? tnd : ""); // Kiểm tra giá trị của tnd trước khi ghi
 		
 	}
 	
@@ -112,64 +119,63 @@ public class ServerThread extends Thread {
 		
 	}
 
-	private void doJoinRoom(String numberRoom) throws Exception{
-		int idRoom = Integer.parseInt(numberRoom);
-		WaitRoomModel waitRoom = waitRooms.get(idRoom - 1);
-		synchronized (waitRoom) {
-			if(waitRoom.isFull()) {
-				dop.writeUTF("svRoom");
-				dop.writeUTF("full");
-				currentWaitRoom = null;
-			}else {
-				waitRoom.addClient(this);
-				String check = waitRoom.checkColor();
-				if(check.equals("white")) {
-					boolean white = false;
-					boolean black = waitRoom.getBlack();
-					waitRoom.setColor(white, black);
-					colorPlayer = "white";
-				}else {
-					boolean white = waitRoom.getWhite();
-					boolean black = false;
-					waitRoom.setColor(white, black);
-					colorPlayer = "black";
-				}
-				currentWaitRoom = waitRoom;
-				dop.writeUTF("svRoom");
-				dop.writeUTF("success");
-				dop.writeUTF(colorPlayer);
-				System.out.println("chao mung tham gia phong" + idRoom);
-			}
-		}
-		
-		if (currentWaitRoom != null) {
-			this.signalRoom = "JOIN " + numberRoom;
-    		currentWaitRoom.broadcastMessage(this, signalRoom);
-        }
-	}
+	private void doJoinRoom(String numberRoom) throws Exception {
+	    int idRoom = Integer.parseInt(numberRoom);
+	    WaitRoomModel waitRoom = waitRooms.get(idRoom - 1);
+	    synchronized (waitRoom) {
+	       while (waitRoom.isFull()) {
+	        	waitRoom.wait();
+	        } 
+	            waitRoom.addClient(this);
+
+	            if (waitRoom.getClientCount() == 1) {
+	                // Nếu chỉ có một người chơi trong phòng, gán màu sắc cho người chơi này là màu trắng
+	                boolean white = true;
+	                waitRoom.setColor(white, false);
+	                colorPlayer = "white";
+	            } else {
+	                // Nếu đã đủ hai người chơi, xác định màu sắc cho người chơi thứ hai
+	                boolean white = waitRoom.getWhite(); // Lấy màu sắc của người chơi đầu tiên
+	                boolean black = !white; // Đảo ngược màu sắc để gán cho người chơi thứ hai
+	                waitRoom.setColor(white, black);
+	                colorPlayer = "black";
+	            }
+
+	            currentWaitRoom = waitRoom;
+	            dop.writeUTF("svRoom");
+	            dop.writeUTF("success");
+	            dop.writeUTF(colorPlayer);
+
+	            System.out.println("Chào mừng tham gia phòng " + idRoom);
+
+	            if (waitRoom.getClientCount() == 2) {
+	                // Gửi tín hiệu cho cả hai client để bắt đầu trò chơi
+	            	 waitRoom.notifyAll();
+	                waitRoom.broadcastMessage("startGame");
+	            }
+	        }
+	    }
 	
+
 	private void doLeaveRoom(String numberRoom) throws Exception{
 		this.colorPlayer = dip.readUTF();
 		int idRoom = Integer.parseInt(numberRoom);
 		WaitRoomModel waitRoom = waitRooms.get(idRoom - 1);
 		synchronized (waitRoom) {
-			if(colorPlayer.equals("white")) {
-				boolean white = true;
-				boolean black = waitRoom.getBlack();
-				waitRoom.setColor(white, black);
-			}else {
-				boolean white = waitRoom.getWhite();
-				boolean black = true;
-				waitRoom.setColor(white, black);
-			}
-			waitRoom.removerClient(this);
-			System.out.println("da thoat khoi phong " + idRoom);
+		    if (colorPlayer.equals("white")) {
+		        boolean white = true;
+		        boolean black = waitRoom.getBlack();
+		        waitRoom.setColor(white, black);
+		    } else {
+		        boolean white = waitRoom.getWhite();
+		        boolean black = true;
+		        waitRoom.setColor(white, black);
+		    }
+		    waitRoom.removerClient(this);
+		    System.out.println("Đã thoát khỏi phòng " + idRoom);
+
+		     // Giảm số lượng client khi có một client thoát khỏi phòng
 		}
-		
-		if (currentWaitRoom != null) {
-			this.signalRoom = "JOIN " + numberRoom;
-    		currentWaitRoom.broadcastMessage(this, signalRoom);
-        }
 	}
 	
 	public String getCountPlayer() {
