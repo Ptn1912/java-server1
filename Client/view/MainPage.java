@@ -11,6 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import controller.*;
@@ -25,6 +28,20 @@ public class MainPage extends JFrame {
 	public MainPage(Client client) {
 		this.client = client;
 		init();
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                try {
+                	client.doSendSignal("close");
+					client.closeClient();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				};
+            }
+		});
+		
 		MainPageController control = new MainPageController(btnRank, btnMode, btnGuide, btnExit, this);
 		control.doSetClient(client);
 		control.setEvent();

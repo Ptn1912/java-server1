@@ -19,6 +19,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,8 +41,21 @@ public class Rank extends JFrame {
 	private DefaultTableModel tableModel;
 	private int selectedRow = -1;
 	private Client client;
-	public Rank() {
-
+	public Rank(Client client) {
+		this.client  = client;
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                try {
+                	client.doSendSignal("close");
+					client.closeClient();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				};
+            }
+		});
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 948, 561);
 		contentPane = new JPanel();

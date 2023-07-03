@@ -16,6 +16,7 @@ public class Server {
     public static ServerThreadBus serverThreadBus = new ServerThreadBus();
     private ServerSocket serverSocket;
 	private List<WaitRoomModel> waitRooms;
+	private List<String> nameList = new ArrayList<>();
 	private boolean isServerRunning;
 	
 	public void startWaitRoom() {
@@ -35,7 +36,7 @@ public class Server {
 	        while (isServerRunning) {
 	            Socket clientSocket = serverSocket.accept();
 	            System.out.println("Một client mới đã kết nối: " + clientSocket);
-	            ServerThread threadServer = new ServerThread(clientSocket, waitRooms, clientNumber++);
+	            ServerThread threadServer = new ServerThread(clientSocket, waitRooms, clientNumber++, serverThreadBus, this);
 	            serverThreadBus.add(threadServer);
                 System.out.println("Số thread đang chạy là: "+serverThreadBus.getLength());
 	            threadServer.start();
@@ -57,5 +58,38 @@ public class Server {
 	            e.printStackTrace();
 	        }
 	    }
+	}
+	
+	public boolean addNameList(String name) {
+		boolean check = true;
+		for(String nameChild : nameList) {
+			if(nameChild != null && nameChild.equals(name)) {
+				check = false;
+				break;
+			}
+		}
+		
+		if(check == true) {
+			nameList.add(name);
+		}
+		
+		return check;
+	}
+	
+	public void removeNameList(String name) {
+	    Iterator<String> iterator = nameList.iterator();
+	    while (iterator.hasNext()) {
+	        String nameChild = iterator.next();
+	        if (nameChild.equals(name)) {
+	            iterator.remove();
+	        }
+	    }
+	}
+
+	
+	public void printNameList() {
+		for(String nameChild : nameList) {
+			System.out.println(nameChild + " ");
+		}
 	}
 }

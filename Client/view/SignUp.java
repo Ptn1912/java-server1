@@ -18,6 +18,8 @@ import client.Client;
 import javax.swing.JButton;
 import controller.*;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 
 public class SignUp extends JFrame {
@@ -32,6 +34,20 @@ public class SignUp extends JFrame {
 	public SignUp(Client client){
 		this.client = client;
 		init();
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                try {
+                	client.doSendSignal("close");
+					client.closeClient();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				};
+            }
+		});
+		
         SignUpController control = new SignUpController(btnAccountSurvivaled, btnConfirm, this, textField_1,textField_2, textField_3,passwordField_1,passwordField_2);
         control.doSetClient(client);
         control.setEvent();

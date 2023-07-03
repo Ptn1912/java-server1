@@ -25,6 +25,10 @@ public class ServerThreadBus {
         listServerThreads.add(serverThread);
     }
     
+    public void remove(ServerThread serverThread){
+    	listServerThreads.remove(serverThread);
+    }
+    
     public void mutilCastSend(String message){ //like sockets.emit in socket.io
         for(ServerThread serverThread : Server.serverThreadBus.getListServerThreads()){
             try {
@@ -72,11 +76,5 @@ public class ServerThreadBus {
             }
         }
     }
-    public void remove(int id){
-        for(int i=0; i<Server.serverThreadBus.getLength(); i++){
-            if(Server.serverThreadBus.getListServerThreads().get(i).getClientNumber()==id){
-                Server.serverThreadBus.listServerThreads.remove(i);
-            }
-        }
-    }
+    
 }

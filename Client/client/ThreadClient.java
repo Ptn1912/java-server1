@@ -34,21 +34,23 @@ public class ThreadClient extends Thread {
 	public void run() {
 		try {
 			while(!socket.isClosed()) {
-				String receivedSignal = dip.readUTF();
-				if(receivedSignal.equals("svLogin") ) {
-					doSvLogin();
+				if (dip.available() > 0) {
+					String receivedSignal = dip.readUTF();
+					if(receivedSignal.equals("svLogin") ) {
+						doSvLogin();
 
-				}else if (receivedSignal.equals("svRegister")) {
-					doSvRegister();
+					}else if (receivedSignal.equals("svRegister")) {
+						doSvRegister();
 
-				}else if(receivedSignal.equals("svRoom")) {
-					doSvRoom();
+					}else if(receivedSignal.equals("svRoom")) {
+						doSvRoom();
 
-				}else if(receivedSignal.equals("svCount")){
-					dogetCount();
-					
-				}else if(receivedSignal.equals("svError")){
-					//
+					}else if(receivedSignal.equals("svCount")){
+						dogetCount();
+						
+					}else if(receivedSignal.equals("svError")){
+						//
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -113,6 +115,13 @@ public class ThreadClient extends Thread {
 	public void dogetCount() throws IOException{
 		countPlayer = dip.readUTF();
 		ctrl.doCallback(this);
+	}
+	
+	public void closeClient() throws IOException {
+		
+		dip.close();
+		dop.close();
+		socket.close();
 	}
 }
 

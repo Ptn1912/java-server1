@@ -10,6 +10,9 @@ import client.Client;
 import javax.swing.UIManager;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import javax.swing.JButton;
@@ -28,6 +31,20 @@ public class ModePlay extends JFrame {
 	public ModePlay(Client client) {
 		this.client = client;
 		init();
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                try {
+                	client.doSendSignal("close");
+					client.closeClient();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				};
+            }
+		});
+		
 		ModePlayController control = new ModePlayController(bntComputer, btnPlayer, btnHome, this);
 		control.doSetClient(client);
 		control.setEvent();

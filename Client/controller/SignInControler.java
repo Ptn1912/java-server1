@@ -94,6 +94,8 @@ public class SignInControler implements Controller{
                 }
             }
         });
+        
+        
     }
     
 	
@@ -144,8 +146,9 @@ public class SignInControler implements Controller{
             signIn.dispose();
             StartServer ss = new StartServer();
             ss.setVisible(true);
-        }
-        else {
+        }else if("online".equals(currentResult)) {
+        	JOptionPane.showMessageDialog(null, "Tài khoản này đang được sử dụng \nVui lòng đăng nhập tại khoản khác");
+        }else {
             JOptionPane.showMessageDialog(null, "User hoặc password sai!");
         }
 	}

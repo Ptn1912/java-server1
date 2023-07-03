@@ -72,6 +72,10 @@ public class Client {
     	return threadClient.getCountPlayer();
     }
     
+    public void closeClient() throws IOException {
+    	threadClient.closeClient();
+    }
+    
     public Team getTeam() {
         return team;
     }

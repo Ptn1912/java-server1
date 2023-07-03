@@ -2,6 +2,9 @@ package view;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -29,10 +32,23 @@ public class SignIn extends JFrame {
 	public SignIn(Client client) {
 		this.client = client;
 		init();
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                try {
+                	client.doSendSignal("close");
+					client.closeClient();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				};
+            }
+		});
+		
 		SignInControler control = new SignInControler(btnSignUp, btnSignIn, this, textField, passwordField);
 		control.doSetClient(client);
 		control.setEvent();
-		
 	}
 	public void init() {
 		setTitle("Đăng Nhập");

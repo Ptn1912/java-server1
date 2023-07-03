@@ -6,6 +6,8 @@ import java.awt.TextArea;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -28,7 +30,22 @@ public class Guide extends JFrame {
 
 	private JPanel contentPane;
 	private Client client;
-	public Guide() {
+	public Guide(Client client) {
+		this.client = client;
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                try {
+                	client.doSendSignal("close");
+					client.closeClient();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				};
+            }
+		});
+		
 		setVisible(true);
 		setTitle("Hướng dẫn");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

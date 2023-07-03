@@ -20,6 +20,7 @@ public class WaitRoomController implements Controller{
 	private JButton btnHome;
 	private JPanel[] panelRooms;
 	private String[] countRooms;
+
 	private WaitRoomController self = this;
 	public WaitRoomController(JButton btnHome, JFrame waitRoom, JPanel[] panelRooms, String[] countRooms) {
 		this.btnHome = btnHome;

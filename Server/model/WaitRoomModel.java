@@ -1,5 +1,6 @@
 package model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import client.ThreadClient;
@@ -53,11 +54,9 @@ public class WaitRoomModel {
 		return black;
 	}
 	
-	public void broadcastMessage(ServerThread sender, String message) {
-        for (ServerThread client : clients) {
-            if (client != sender) {
-                client.sendMessage("Client " + String.valueOf(sender.getPort()) + ": " + message);
-            }
-        }
-    }
+	 public void broadcastMessage(String message) throws IOException {
+	        for (ServerThread client : clients) {
+	            client.write(message);
+	        }
+	    }
 }

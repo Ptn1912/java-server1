@@ -39,7 +39,7 @@ public class MainPageController implements Controller{
 			
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent e) {
-				Rank jframeRank = new Rank();
+				Rank jframeRank = new Rank(client);
 				mainPage.dispose();
 			}
 		});
@@ -83,7 +83,7 @@ public class MainPageController implements Controller{
 			
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent e) {
-				Guide jframeGuide = new Guide();
+				Guide jframeGuide = new Guide(client);
 				mainPage.dispose();
 				
 			}

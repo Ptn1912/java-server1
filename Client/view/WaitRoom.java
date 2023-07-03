@@ -15,6 +15,8 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import controller.*;
@@ -32,6 +34,20 @@ public class WaitRoom extends JFrame {
 	public WaitRoom(Client client, String countPlayer) {
 		this.client = client;
 		this.countPlayer = countPlayer;
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                try {
+                	client.doSendSignal("close");
+					client.closeClient();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				};
+            }
+		});
+		
 		String[] countRooms = countPlayer.split(" ");
 		init();
 		JPanel[] panelRooms = { panel_room1, panel_room2, panel_room3, panel_room4, panel_room5, panel_room6, panel_room7, panel_room8 };

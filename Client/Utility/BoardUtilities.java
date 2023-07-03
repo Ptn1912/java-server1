@@ -32,7 +32,7 @@ public class BoardUtilities {
 
     public static ImageIcon getImageOfTeamPiece(Team team, PieceTypes pieceType) {
 
-        String imagePath = "C:\\Users\\Msi\\OneDrive\\Pictures\\java-server1\\Client\\images\\";
+        String imagePath = "D:\\JAVA\\java-server1.1\\Client\\images\\";
         if (team == null || pieceType == null) {
             imagePath += "transparent.png";
         } else {

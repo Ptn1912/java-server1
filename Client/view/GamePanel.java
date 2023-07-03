@@ -30,6 +30,7 @@ public class GamePanel {
 	     this.gameFrame.setSize(GUI_Configurations.OUTER_FRAME_DIMENSION);
 	     createGamePanel();
 	     this.gameFrame.setVisible(true);
+	    
 	 }
 
 
